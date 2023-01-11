@@ -1,0 +1,63 @@
+/* wrapper */
+.react-form-builder {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* inner wrapper */
+.react-form-builder > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  padding: 0 1rem;
+}
+
+/* left side */
+.react-form-builder-preview {
+  display: flex;
+  flex-flow: column nowrap;
+  height: auto;
+  overflow-y: scroll;
+  min-height: initial !important;
+}
+/* right-side */
+.react-form-builder-toolbar {
+  position: relative;
+  margin-block: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  margin-block-start: 0;
+  padding-block-start: 3rem;
+}
+
+/* toolbar header */
+.react-form-builder-toolbar h4 {
+  background: #fff;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 3rem;
+  margin-block-start: 0;
+}
+
+/* list of buttons */
+.react-form-builder-toolbar ul {
+  width: fit-content;
+  margin-top: 3rem;
+  position: relative;
+  overflow: scroll;
+}
+
+/* individual button in the list */
+.react-form-builder-toolbar li {
+  white-space: nowrap;
+  width: 15.5rem;
+}
+
+/* dropdown area is hidden when item is added */
+.form-place-holder-hidden {
+}
+
+/* list of added items */
+.Sortable {
+}
