@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+
 import { Button, Container, modalOpenIdState } from '../../shared';
 
 const id = 'Administrator';

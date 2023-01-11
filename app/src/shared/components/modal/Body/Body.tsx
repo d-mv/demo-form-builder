@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { PropsWithChildren } from 'react';
+
 import classes from './Body.module.scss';
 
 interface BodyProps {

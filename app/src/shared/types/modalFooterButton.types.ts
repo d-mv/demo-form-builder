@@ -3,13 +3,13 @@ export enum ButtonTypes {
   SECONDARY = 'secondary',
 }
 
-export interface ButtonType {
-  id: string;
-  label: string;
-  type: ButtonTypes;
-}
-
 export enum ModalFooterButtons {
   SAVE = 'Save',
   CANCEL = 'Cancel',
+}
+
+export interface ButtonType {
+  id: ModalFooterButtons;
+  label: string;
+  type: ButtonTypes;
 }

@@ -1,0 +1,39 @@
+.container {
+	display: flex;
+	width: 100%;
+	height: auto !important;
+	padding: 1rem;
+	position: relative;
+	align-items: center;
+}
+
+.input {
+	width: 40rem;
+	font-size: 1.6rem;
+	padding: 0.3rem 0.5rem;
+	border-radius: .1rem;
+	border: .1rem solid var(--color-primary-3);
+	outline: none;
+
+	&::placeholder {
+		color: var(--color-primary-3);
+		font-weight: 300;
+		font-style: italic;
+	}
+
+	&:focus {
+		background-color: var(--color-info-1);
+		color: var(--color-white);
+
+	}
+}
+
+.error {
+	border-color: var(--color-error-1);
+}
+
+.error-message {
+	margin-inline-start: 2rem;
+	font-size: 1.2rem;
+	color: var(--color-error-1);
+}

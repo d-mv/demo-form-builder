@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
-import { Icon } from '../..';
 
+import { Icon } from '../..';
 import classes from './Header.module.scss';
 
 interface HeaderProps {

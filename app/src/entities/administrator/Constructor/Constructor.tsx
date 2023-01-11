@@ -1,21 +1,58 @@
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { FormBuilderPostData, ReactFormBuilder, TaskData } from 'react-form-builder2';
+import { useEffect, useState } from 'react';
+
 import classes from './Constructor.module.scss';
 import {
   Body,
   Footer,
+  FormName,
   getModalCloseFn,
   Header,
-  LazyLoad,
   ModalFooterButtons,
   MODAL_FOOTER_BUTTONS,
 } from '../../../shared';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { FormBuilder } from '../../formBuilder';
-import { FormBuilderPostData, ReactFormBuilder, TaskData } from 'react-form-builder2';
-import { formBuilderState } from '../../formBuilder/FormBuilder.state';
-import { useEffect, useState } from 'react';
+import { formBuilderState, formErrorState } from './Constructor.state';
 
 export default function Constructor() {
   const modalCloseFn = useSetRecoilState(getModalCloseFn);
+
+  // there is some issue with using Recoil for this data
+  const [taskData, setTaskData] = useState([] as TaskData[]);
+
+  const [form, setForm] = useRecoilState(formBuilderState);
+
+  const [formError, setFormError] = useRecoilState(formErrorState);
+
+  // non-shareable state
+  const [submitEnabled, setSubmitEnabled] = useState(false);
+
+  useEffect(() => {
+    if (taskData.length && !form.name) setFormError("Please, don't forget the name");
+  }, [taskData, form.name, setFormError]);
+
+  useEffect(() => {
+    if (taskData.length && form.name && !submitEnabled) setSubmitEnabled(true);
+    else if ((!taskData.length || !form.name) && submitEnabled) setSubmitEnabled(false);
+  }, [taskData, form.name, formError, submitEnabled]);
+
+  // temporary hack to avoid double html5 backend
+  // TODO: research older react version
+  // @ts-ignore -- temp
+  if (window.__isReactDndBackendSetUp) {
+    // @ts-ignore -- temp
+    window.__isReactDndBackendSetUp = false;
+  }
+
+  function handleChange(data: FormBuilderPostData) {
+    setTaskData(data.task_data);
+  }
+
+  function handleNameChange(name: string) {
+    if (formError && Boolean(name)) setFormError('');
+
+    setForm({ ...form, name });
+  }
 
   function handleClose() {
     modalCloseFn('');
@@ -25,25 +62,18 @@ export default function Constructor() {
     if (id === ModalFooterButtons.CANCEL) modalCloseFn('');
   }
 
-  const [s, setS] = useState([] as TaskData[]);
-
-  function handleChange(data: TaskData[]) {
-    setS(data);
-  }
-
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(s);
-  }, [s]);
-
   return (
     <div className={classes.container}>
       <Header onClick={handleClose} title='Build Form' />
       <Body className={classes.body}>
-        {/* <FormBuilder onChange={handleChange} /> */}
-        <ReactFormBuilder onPost={d => handleChange(d.task_data)} />
+        <FormName onChange={handleNameChange} error={formError} />
+        <ReactFormBuilder saveAlways={true} onPost={handleChange} />
       </Body>
-      <Footer onClick={handleFooterClick} buttons={MODAL_FOOTER_BUTTONS} />
+      <Footer
+        onClick={handleFooterClick}
+        buttons={MODAL_FOOTER_BUTTONS}
+        statuses={{ [ModalFooterButtons.SAVE]: submitEnabled ? '' : 'disabled' }}
+      />
     </div>
   );
 }
