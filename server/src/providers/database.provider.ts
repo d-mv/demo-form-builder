@@ -1,78 +1,34 @@
-// import { Action, ActionWithPayload, StateActions } from '../models';
-// import { DbFlag, Flag, Flags } from '../schemas';
-// import { logger } from '../server';
-// import { store, updateSetOfFlags } from '../state';
+import { ActionWithPayload, AnyValue, PromisedResult, success, failure, Action } from '@mv-d/toolbelt';
 
-// export type PromisedResult<Payload = unknown, ErrorType = Error> = Promise<Result<Payload, ErrorType>>;
+import { FormItem, FormModal } from '../schemas/forms.schema';
 
-// export type DbProviderFunction<Payload = AnyValue> = (action: ActionWithPayload<Payload>) => PromisedResult;
+export const DB_ACTIONS_ENUM = {
+  ADD_NEW_FORM: 'addNewForm',
+} as const;
 
-// const DB_PROVIDER_MAP = new Map<StateActions, DbProviderFunction>();
+type DbActionsEnumKeys = keyof typeof DB_ACTIONS_ENUM;
 
-// DB_PROVIDER_MAP.set(StateActions.ADD_ONE, async (action: ActionWithPayload<Flag>) => {
-//   try {
-//     await DbFlag.create(action.payload);
-//     return success(true);
-//   } catch (err) {
-//     return failure(err as Error);
-//   }
-// });
+export type DbActions = typeof DB_ACTIONS_ENUM[DbActionsEnumKeys];
 
-// DB_PROVIDER_MAP.set(StateActions.UPDATE_BY_ID, async (action: ActionWithPayload<Flag>) => {
-//   try {
-//     const { flagId, value } = action.payload;
+export type DbProviderFn<Payload = AnyValue> = (action: ActionWithPayload<Payload>) => PromisedResult<AnyValue>;
 
-//     await DbFlag.updateOne({ flagId }, { value });
-//     return success(true);
-//   } catch (err) {
-//     return failure(err as Error);
-//   }
-// });
+const DB_PROVIDER_MAP = new Map<DbActions, DbProviderFn>();
 
-// DB_PROVIDER_MAP.set(StateActions.UPDATE_SET, async (action: ActionWithPayload<Flags>) => {
-//   let result = true;
+DB_PROVIDER_MAP.set(
+  DB_ACTIONS_ENUM.ADD_NEW_FORM,
+  async (action: ActionWithPayload<FormItem>): PromisedResult<string> => {
+    try {
+      await FormModal.create(action.payload);
+      return success('OK');
+    } catch (err) {
+      return failure(err as Error);
+    }
+  },
+);
 
-//   const errors: string[] = [];
+export async function dbProvider<Payload = void>(action: Action<DbActions, Payload>) {
+  const fn = DB_PROVIDER_MAP.get(action.type);
 
-//   for await (const item of action.payload) {
-//     const { flagId, value } = item;
-
-//     try {
-//       const result = await DbFlag.updateOne({ flagId }, { value });
-
-//       if (!result.modifiedCount) throw new Error(`Key ${flagId} was not updated`);
-//     } catch (err) {
-//       result = false;
-//       errors.push('message' in (err as Error) ? (err as Error)['message'] : `Unknown error updating flagId ${flagId}`);
-//     }
-//   }
-
-//   if (result) return success(`Successfully update ${action.payload.length} keys.`);
-
-//   return failure(errors.join('. '));
-// });
-
-// async function callProviderFn<Payload = void>(action: Action<Payload>): PromisedResult {
-//   const fn = DB_PROVIDER_MAP.get(action.type);
-
-//   if (fn) return await fn(action as ActionWithPayload<Payload>);
-//   else return failure(`Unable to find the function for ${action.type}`);
-// }
-
-// export async function dbProvider<Payload = void>(action: Action<Payload>) {
-//   const result = await callProviderFn(action);
-
-//   if (result.isOK) logger.info(result, `dbProvider >> ${action.type}`);
-//   else logger.error(result, `dbProvider >> ${action.type}`);
-// }
-
-// export async function reStore(): PromisedResult<boolean> {
-//   const storeFromDb = await DbFlag.find({});
-
-//   const newStore = reduce((acc, elem) => append(elem, acc), [] as Flags, storeFromDb);
-
-//   store.dispatch(updateSetOfFlags(newStore));
-//   return success(true);
-// }
-
-export const dbProvider = '';
+  if (fn) return fn(action as ActionWithPayload<AnyValue>);
+  else return failure(new Error(`Unable to find the function for ${action.type}`));
+}

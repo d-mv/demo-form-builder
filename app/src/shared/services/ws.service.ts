@@ -1,5 +1,7 @@
 import { io, Socket } from '@mv-d/toolbelt';
+
 import { CONFIG } from '../config';
+import { FormItem } from '../state';
 
 class WsServiceClass {
   #connection: Socket;
@@ -19,6 +21,10 @@ class WsServiceClass {
       connection.on('welcome', (message: string) => {
         // eslint-disable-next-line no-console
         console.log(message);
+      });
+      connection.on('newForm', (form: FormItem) => {
+        // eslint-disable-next-line no-console
+        console.log('newForm', form);
       });
     }
 

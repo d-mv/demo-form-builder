@@ -2,7 +2,8 @@ import { makeMatch } from '@mv-d/toolbelt';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { Dialog, LazyLoad, Modal, modalIdState, MODALS_ENUM } from '../../shared';
-import { Forms, Constructor } from '../administrator';
+import { Constructor } from '../administrator';
+import { Forms } from './Forms';
 
 const MODAL_CONTENTS = makeMatch(
   {
