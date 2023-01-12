@@ -8,15 +8,36 @@ export type FormItem = {
   data: TaskData[];
 };
 
-export const selectedForm = atom<string>({
+export const formReviewState = atom<FormItem>({
+  key: 'forms/review',
+});
+
+export const formReviewSelector = selector({
+  key: 'forms/review/selector',
+  get: ({ get }) => get(formReviewState),
+  set: ({ set }, v) => set(formReviewState, v),
+});
+
+export const formViewState = atom({
+  key: 'forms/view',
+  default: false,
+});
+
+export const formViewSelector = selector({
+  key: 'forms/view/selector',
+  get: ({ get }) => get(formViewState),
+  set: ({ set }, v) => set(formViewState, v),
+});
+
+export const selectedFormState = atom<string>({
   key: 'forms/selected',
   default: '',
 });
 
 export const selectedFormSelector = selector({
   key: 'forms/selected/selector',
-  get: ({ get }) => get(selectedForm),
-  set: ({ set }, v) => set(selectedForm, v),
+  get: ({ get }) => get(selectedFormState),
+  set: ({ set }, v) => set(selectedFormState, v),
 });
 
 export const forms = atom<FormItem[]>({

@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 
 import { Button, ButtonContainer, modalIdState, MODALS_ENUM } from '../../shared';
 
-const id = MODALS_ENUM.REVIEWER;
+const id = MODALS_ENUM.REVIEW;
 
 export function Reviewer() {
   const [modalId, setModalId] = useRecoilState(modalIdState);

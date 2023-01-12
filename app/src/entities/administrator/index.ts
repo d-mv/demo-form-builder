@@ -2,4 +2,4 @@ export * from './Administrator';
 
 export * from './Constructor';
 
-export * from './Forms';
+export * from '../modals/Forms';

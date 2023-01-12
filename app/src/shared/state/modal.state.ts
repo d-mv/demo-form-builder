@@ -4,8 +4,8 @@ export const MODALS_ENUM = {
   FORMS: 'Forms',
   ADMINISTRATOR: 'Administrator',
   FORM_EDIT: 'formEdit',
-  REQUESTOR: 'Requestor',
-  REVIEWER: 'Reviewer',
+  USE: 'USE',
+  REVIEW: 'REVIEW',
   ADD_NEW: 'addNew',
   NONE: 'none',
 } as const;

@@ -12,14 +12,14 @@ import {
   ModalFooterButtons,
   modalIdState,
   MODAL_FOOTER_BUTTONS,
-  selectedForm,
+  selectedFormState,
 } from '../../../shared';
 import { formBuilderState, formErrorState } from './Constructor.state';
 
 export default function Constructor() {
   const closeModal = useResetRecoilState(modalIdState);
 
-  const selectedFormId = useRecoilValue(selectedForm);
+  const selectedFormId = useRecoilValue(selectedFormState);
 
   const [form, setForm] = useRecoilState(formBuilderState);
 

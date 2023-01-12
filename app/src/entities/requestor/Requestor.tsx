@@ -1,13 +1,16 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { Button, ButtonContainer, modalIdState, MODALS_ENUM } from '../../shared';
+import { Button, ButtonContainer, formViewState, modalIdState, MODALS_ENUM } from '../../shared';
 
-const id = MODALS_ENUM.REQUESTOR;
+const id = MODALS_ENUM.FORMS;
 
 export function Requestor() {
   const [modalId, setModalId] = useRecoilState(modalIdState);
 
+  const setViewMode = useSetRecoilState(formViewState);
+
   function handleClick() {
+    setViewMode(true);
     setModalId(modalId === id ? MODALS_ENUM.NONE : id);
   }
 
