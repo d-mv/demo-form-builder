@@ -1,19 +1,19 @@
 import { useRecoilState } from 'recoil';
 
-import { Button, Container, modalOpenIdState } from '../../shared';
+import { Button, ButtonContainer, modalIdState, ModalsEnum, MODALS_ENUM } from '../../shared';
 
-const id = 'Administrator';
+const IDS: ModalsEnum[] = [MODALS_ENUM.FORMS, MODALS_ENUM.ADD_NEW];
 
 export function Administrator() {
-  const [modalOpenId, setModalOpenId] = useRecoilState(modalOpenIdState);
+  const [modalId, setModalId] = useRecoilState(modalIdState);
 
   function handleClick() {
-    setModalOpenId(modalOpenId === id ? '' : id);
+    setModalId(IDS.includes(modalId) ? MODALS_ENUM.NONE : IDS[0]);
   }
 
   return (
-    <Container>
-      <Button isOpen={modalOpenId === id} onClick={handleClick} label={id} isDisabled={false} />
-    </Container>
+    <ButtonContainer>
+      <Button isOpen={IDS.includes(modalId)} onClick={handleClick} label='Administrator' isDisabled={false} />
+    </ButtonContainer>
   );
 }

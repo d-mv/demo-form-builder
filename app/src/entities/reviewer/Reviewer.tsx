@@ -1,19 +1,19 @@
 import { useRecoilState } from 'recoil';
 
-import { Button, Container, modalOpenIdState } from '../../shared';
+import { Button, ButtonContainer, modalIdState, MODALS_ENUM } from '../../shared';
 
-const id = 'Reviewer';
+const id = MODALS_ENUM.REVIEWER;
 
 export function Reviewer() {
-  const [modalOpenId, setModalOpenId] = useRecoilState(modalOpenIdState);
+  const [modalId, setModalId] = useRecoilState(modalIdState);
 
   function handleClick() {
-    setModalOpenId(modalOpenId === id ? '' : id);
+    setModalId(modalId === id ? MODALS_ENUM.NONE : id);
   }
 
   return (
-    <Container>
-      <Button isOpen={modalOpenId === id} onClick={handleClick} label={id} isDisabled={false} />
-    </Container>
+    <ButtonContainer>
+      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={false} />
+    </ButtonContainer>
   );
 }

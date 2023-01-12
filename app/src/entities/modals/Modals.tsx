@@ -1,22 +1,34 @@
 import { makeMatch } from '@mv-d/toolbelt';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 
-import { Dialog, LazyLoad, Modal, modalOpenIdState } from '../../shared';
-import { Constructor } from '../administrator';
+import { Dialog, LazyLoad, Modal, modalIdState, MODALS_ENUM } from '../../shared';
+import { Forms, Constructor } from '../administrator';
 
-const MODAL_CONTENTS = makeMatch({ Administrator: Constructor }, () => null);
+const MODAL_CONTENTS = makeMatch(
+  {
+    [MODALS_ENUM.ADD_NEW]: Constructor,
+    [MODALS_ENUM.FORMS]: Forms,
+    [MODALS_ENUM.FORM_EDIT]: Constructor,
+  },
+  () => null,
+);
 
 export function Modals() {
-  const [modalOpenId, setModalOpenId] = useRecoilState(modalOpenIdState);
+  const modalId = useRecoilValue(modalIdState);
+
+  const closeModal = useResetRecoilState(modalIdState);
 
   const handleClose = () => {
-    setModalOpenId('');
+    closeModal();
   };
 
-  if (!modalOpenId) return null;
+  // eslint-disable-next-line no-console
+  console.log(modalId);
+
+  if (modalId === MODALS_ENUM.NONE) return null;
 
   function renderModalContents() {
-    const Module = MODAL_CONTENTS[modalOpenId];
+    const Module = MODAL_CONTENTS[modalId];
 
     return (
       <LazyLoad>

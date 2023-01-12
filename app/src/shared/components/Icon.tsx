@@ -7,7 +7,7 @@ import { BsFillHandThumbsUpFill } from 'react-icons/bs';
 import { BiShow, BiHide, BiRadioCircle } from 'react-icons/bi';
 import { FiEye } from 'react-icons/fi';
 import { TfiControlForward } from 'react-icons/tfi';
-import { TbFilterOff } from 'react-icons/tb';
+import { TbFilterOff, TbForms } from 'react-icons/tb';
 import { RxDividerHorizontal } from 'react-icons/rx';
 import { makeMatch } from '@mv-d/toolbelt';
 
@@ -29,6 +29,7 @@ export const Icons = makeMatch(
     return: IoReturnUpBack,
     dividerH: RxDividerHorizontal,
     radioCircle: BiRadioCircle,
+    form: TbForms,
   },
   () => <div />,
 );

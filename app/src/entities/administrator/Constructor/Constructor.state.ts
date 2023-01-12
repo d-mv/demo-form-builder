@@ -1,5 +1,6 @@
-import { TaskData } from 'react-form-builder2';
+import { generateId } from '@mv-d/toolbelt';
 import { atom, selector } from 'recoil';
+import { FormItem } from '../../../shared';
 
 export const formErrorState = atom<string>({
   key: 'form/error',
@@ -12,13 +13,13 @@ export const formError = selector({
   set: ({ set }, value) => set(formErrorState, value),
 });
 
-export const formBuilderState = atom<{ data: TaskData[]; name: string }>({
+export const formBuilderState = atom<FormItem>({
   key: 'form/builder',
-  default: { data: [], name: '' },
+  default: { data: [], name: '', id: generateId() },
 });
 
-// export const formBuilder = selector({
-//   key: 'formBuilder',
-//   get: ({ get }) => get(formBuilderState),
-//   set: ({ set }, value) => set(formBuilderState, value),
-// });
+export const formBuilderSelector = selector({
+  key: 'form/builder/selector',
+  get: ({ get }) => get(formBuilderState),
+  set: ({ set }, v) => set(formBuilderState, v),
+});
