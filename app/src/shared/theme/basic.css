@@ -55,9 +55,9 @@
   --divider-primary-3: 0.1rem solid var(--color-primary-3)
 }
 
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
   display: none;
-}
+} */
 
 * {
   box-sizing: border-box;
