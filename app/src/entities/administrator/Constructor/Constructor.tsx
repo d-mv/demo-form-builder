@@ -13,6 +13,7 @@ import {
   modalIdState,
   MODAL_FOOTER_BUTTONS,
   selectedFormState,
+  useWsService,
 } from '../../../shared';
 import { formBuilderState, formErrorState } from './Constructor.state';
 
@@ -64,8 +65,15 @@ export default function Constructor() {
     setForm({ ...form, name });
   }
 
+  const { send } = useWsService();
+
   function handleFooterClick(id: string) {
     if (id === ModalFooterButtons.CANCEL) closeModal();
+
+    if (id === ModalFooterButtons.SAVE) {
+      closeModal();
+      send('addForm', { ...form, data: taskData });
+    }
   }
 
   return (

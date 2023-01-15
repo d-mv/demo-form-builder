@@ -13,7 +13,7 @@ import {
   modalIdSelector,
   MODALS_ENUM,
   formViewState,
-  useHttpService,
+  useWsService,
 } from '../../../shared';
 import { formBuilderSelector, formBuilderState } from '../../administrator/Constructor';
 import classes from './Forms.module.scss';
@@ -35,11 +35,7 @@ export default function Forms() {
 
   const setBuilderForm = useSetRecoilState(formBuilderSelector);
 
-  const { getForms } = useHttpService();
-
-  useEffect(() => {
-    if (isViewMode) getForms();
-  }, [getForms, isViewMode]);
+  const { send } = useWsService();
 
   function handleClose() {
     closeModal();
@@ -47,15 +43,14 @@ export default function Forms() {
 
   function sendForm(formId: string) {
     closeModal();
-    // eslint-disable-next-line no-console
-    console.log(`sending... ${formId}`);
+    send('sendForm', formId);
   }
 
   function handleClick(id: string) {
     return function call() {
       if (isViewMode) return sendForm(id);
 
-      const form = forms.find(f => f.id === id);
+      const form = forms.items.find(f => f.id === id);
 
       if (!form) {
         // eslint-disable-next-line no-console
@@ -88,13 +83,13 @@ export default function Forms() {
   }
 
   // eslint-disable-next-line no-console
-  console.log(isViewMode);
+  console.log('forms rendering');
 
   return (
     <Container>
       <Header onClick={handleClose} title='Forms' />
       <Body className={classes.container}>
-        {forms.map(renderFormButton)}
+        {forms.items.map(renderFormButton)}
         {ifTrue(!isViewMode, renderAddNewButton)}
       </Body>
     </Container>

@@ -2,6 +2,7 @@ import { Optional } from '@mv-d/toolbelt';
 import { Server } from 'socket.io';
 
 import { CONFIG } from '../config';
+import { addFormController, sendFormController } from '../controllers';
 
 import { logger } from '../server';
 
@@ -15,15 +16,19 @@ class WsServiceClass {
       logger.info({ socketId: socket.id }, 'WS:Connected');
       // send config
       socket.emit('welcome', `Demo Form Builder Server, v${CONFIG.version}`);
+
+      socket.on('sendForm', sendFormController);
       // subscribe on store changes
-      socket.on('addForms', (...data: unknown[]) => {
-        logger.info(data, 'addForms');
-      });
+      socket.on('addForm', addFormController);
 
       socket.on('filledForm', (...data: unknown[]) => {
         logger.info(data, 'filledForm');
       });
     });
+  }
+
+  send(action: string, payload?: unknown) {
+    this.#connection && this.#connection.emit(action, payload);
   }
 }
 
