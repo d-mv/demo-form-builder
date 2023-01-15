@@ -1,7 +1,6 @@
 import { failure, io, PromisedResult, Socket, success } from '@mv-d/toolbelt';
 
 import { CONFIG } from '../config';
-import { FormItem } from '../state';
 
 class WsServiceClass {
   #connection: Socket;
@@ -18,18 +17,14 @@ class WsServiceClass {
         // eslint-disable-next-line no-console
         console.log('Connected to backend');
       });
+
+      // TODO: do we need this?
       connection.on('welcome', (message: string) => {
         // eslint-disable-next-line no-console
         console.log(message);
       });
-      connection.on('newFormToFill', (form: FormItem) => {
-        // eslint-disable-next-line no-console
-        console.log('newFormToFill', form);
-      });
-      connection.on('newFormAdded', (form: FormItem) => {
-        // eslint-disable-next-line no-console
-        console.log('newFormAdded', form);
-      });
+
+      // TODO: do we need this?
       connection.on('error', (...data: unknown[]) => {
         // eslint-disable-next-line no-console
         console.log(data);
@@ -40,6 +35,7 @@ class WsServiceClass {
   }
 
   async send<T>(action: string, payload?: unknown): PromisedResult<T> {
+    // TODO: other way to do this?
     const promise = new Promise<T>((resolve, reject) => {
       this.#connection.emit(action, payload, (result: T) => {
         resolve(result);
@@ -53,6 +49,16 @@ class WsServiceClass {
     } catch (err) {
       return failure(err as Error);
     }
+  }
+
+  // to avoid double subscriptions
+  #subscriptionEvents: string[] = [];
+
+  subscribe<T>(event: string, callback: (arg0: T) => void) {
+    if (this.#subscriptionEvents.includes(event)) return;
+
+    this.#subscriptionEvents.push(event);
+    this.#connection.on(event, callback);
   }
 }
 

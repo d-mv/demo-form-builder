@@ -3,6 +3,7 @@ import { FastifyInstance } from 'fastify';
 import { formsGetController, formsPostController } from '../controllers';
 import { FormItem } from '../schemas/forms.schema';
 
+// TODO: remove?
 export function apiRouter_v1(
   server: FastifyInstance,
   _opts: Record<string, unknown>, // ?

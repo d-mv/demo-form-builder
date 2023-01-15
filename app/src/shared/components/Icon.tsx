@@ -9,6 +9,7 @@ import { FiEye } from 'react-icons/fi';
 import { TfiControlForward } from 'react-icons/tfi';
 import { TbFilterOff, TbForms } from 'react-icons/tb';
 import { RxDividerHorizontal } from 'react-icons/rx';
+import { HiOutlineBellAlert } from 'react-icons/hi2';
 import { makeMatch } from '@mv-d/toolbelt';
 
 export const Icons = makeMatch(
@@ -30,6 +31,7 @@ export const Icons = makeMatch(
     dividerH: RxDividerHorizontal,
     radioCircle: BiRadioCircle,
     form: TbForms,
+    alert: HiOutlineBellAlert,
   },
   () => <div />,
 );

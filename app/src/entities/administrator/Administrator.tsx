@@ -10,6 +10,7 @@ export function Administrator() {
   const setViewMode = useSetRecoilState(formViewSelector);
 
   function handleClick() {
+    // use forms in 'write' mode
     setViewMode(false);
     setModalId(IDS.includes(modalId) ? MODALS_ENUM.NONE : IDS[0]);
   }

@@ -1,26 +1,28 @@
 .container {
-	padding: 1rem;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	h5 {
-		font-weight: 600;
-	}
+  h5 {
+    font-weight: 600;
+  }
 }
 
 .close-button {
-	padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
 
-	svg {
-		fill: var(--color-primary-3);
-		height: 2rem;
-		width: 2rem;
-	}
+  svg {
+    transition: var(--transition);
+    fill: var(--color-primary-3);
+    height: 2rem;
+    width: 2rem;
+  }
 
-	&:hover {
-		svg {
-			fill: var(--color-primary-1);
-		}
-	}
+  &:hover {
+    svg {
+      fill: var(--color-accent-1);
+    }
+  }
 }
+

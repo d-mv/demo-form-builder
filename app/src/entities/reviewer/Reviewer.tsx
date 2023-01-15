@@ -1,11 +1,13 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { Button, ButtonContainer, modalIdState, MODALS_ENUM } from '../../shared';
+import { Button, ButtonContainer, formReviewState, modalIdState, MODALS_ENUM } from '../../shared';
 
 const id = MODALS_ENUM.REVIEW;
 
 export function Reviewer() {
   const [modalId, setModalId] = useRecoilState(modalIdState);
+
+  const formToFill = useRecoilValue(formReviewState);
 
   function handleClick() {
     setModalId(modalId === id ? MODALS_ENUM.NONE : id);
@@ -13,7 +15,7 @@ export function Reviewer() {
 
   return (
     <ButtonContainer>
-      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={false} />
+      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={!formToFill} />
     </ButtonContainer>
   );
 }

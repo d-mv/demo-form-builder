@@ -1,5 +1,4 @@
 import { ifTrue } from '@mv-d/toolbelt';
-import { useEffect } from 'react';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import {
@@ -14,8 +13,9 @@ import {
   MODALS_ENUM,
   formViewState,
   useWsService,
+  formBuilderSelector,
+  formBuilderState,
 } from '../../../shared';
-import { formBuilderSelector, formBuilderState } from '../../administrator/Constructor';
 import classes from './Forms.module.scss';
 
 export default function Forms() {
@@ -36,10 +36,6 @@ export default function Forms() {
   const setBuilderForm = useSetRecoilState(formBuilderSelector);
 
   const { send } = useWsService();
-
-  function handleClose() {
-    closeModal();
-  }
 
   function sendForm(formId: string) {
     closeModal();
@@ -82,12 +78,9 @@ export default function Forms() {
     );
   }
 
-  // eslint-disable-next-line no-console
-  console.log('forms rendering');
-
   return (
     <Container>
-      <Header onClick={handleClose} title='Forms' />
+      <Header onClick={closeModal} title='Forms' />
       <Body className={classes.container}>
         {forms.items.map(renderFormButton)}
         {ifTrue(!isViewMode, renderAddNewButton)}

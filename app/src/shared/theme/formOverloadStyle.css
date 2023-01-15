@@ -45,7 +45,12 @@
   width: fit-content;
   margin-top: 3rem;
   position: relative;
-  overflow: scroll;
+  transition: all 0.112s ease-in-out;
+  overflow-y: hidden;
+}
+
+.react-form-builder-toolbar:hover ul {
+  overflow-y: scroll;
 }
 
 /* individual button in the list */

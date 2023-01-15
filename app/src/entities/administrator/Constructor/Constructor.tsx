@@ -1,12 +1,15 @@
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { AnyValue } from '@mv-d/toolbelt';
 import { FormBuilderPostData, ReactFormBuilder, TaskData } from 'react-form-builder2';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import classes from './Constructor.module.scss';
 import {
   Body,
   Container,
   Footer,
+  formBuilderState,
+  formErrorState,
   FormName,
   Header,
   ModalFooterButtons,
@@ -15,9 +18,11 @@ import {
   selectedFormState,
   useWsService,
 } from '../../../shared';
-import { formBuilderState, formErrorState } from './Constructor.state';
+import { ModalsContext } from '../../modals';
 
 export default function Constructor() {
+  const ref = useRef<AnyValue>(null);
+
   const closeModal = useResetRecoilState(modalIdState);
 
   const selectedFormId = useRecoilValue(selectedFormState);
@@ -31,6 +36,14 @@ export default function Constructor() {
 
   // non-shareable state
   const [taskData, setTaskData] = useState([] as TaskData[]);
+
+  const { onLoad } = useContext(ModalsContext);
+
+  // initial loading of the library can be slow => Modals is rendering
+  // 'Loading...'; once library is rendering, call to Modals to remove it
+  useEffect(() => {
+    if (ref.current) onLoad();
+  }, [ref, onLoad]);
 
   // auto-fill state with data
   useEffect(() => {
@@ -72,6 +85,7 @@ export default function Constructor() {
 
     if (id === ModalFooterButtons.SAVE) {
       closeModal();
+      // TODO: move below into WsService hook?
       send('addForm', { ...form, data: taskData });
     }
   }
@@ -82,6 +96,7 @@ export default function Constructor() {
       <Body className={classes.body}>
         <FormName onChange={handleNameChange} value={form.name} error={formError} />
         <ReactFormBuilder
+          ref={ref}
           saveAlways={true}
           onPost={handleChange}
           // @ts-ignore -- data is missing in types, but available

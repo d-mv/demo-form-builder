@@ -74,6 +74,7 @@
     "react-form-builder2": "^0.14.2",
     "react-icons": "^4.7.1",
     "react-refresh": "^0.11.0",
+    "react-spinners": "^0.13.7",
     "recoil": "^0.7.6",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
@@ -96,38 +97,18 @@
     "build": "NODE_ENV=production node scripts/build.js",
     "test": "NODE_ENV=test node scripts/test.js",
     "postinstall": "cp node_modules/@mv-d/toolbelt/dist/logger.js public/logger.js",
-    "lint": "eslint"
+    "lint": "eslint src/**/*.{ts,tsx}"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
+    "roots": ["<rootDir>/src"],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+    "setupFiles": ["react-app-polyfill/jsdom"],
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"],
+    "testMatch": ["<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}", "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"],
     "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
@@ -143,27 +124,11 @@
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
+    "moduleFileExtensions": ["web.js", "js", "web.ts", "ts", "web.tsx", "tsx", "json", "web.jsx", "jsx", "node"],
+    "watchPlugins": ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
     "resetMocks": true
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   }
 }

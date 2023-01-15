@@ -1,6 +1,6 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { Button, ButtonContainer, formViewSelector, modalIdState, MODALS_ENUM } from '../../shared';
+import { Button, ButtonContainer, formsSelector, formViewSelector, modalIdState, MODALS_ENUM } from '../../shared';
 
 const id = MODALS_ENUM.FORMS;
 
@@ -9,6 +9,8 @@ export function Requestor() {
 
   const setViewMode = useSetRecoilState(formViewSelector);
 
+  const forms = useRecoilValue(formsSelector);
+
   function handleClick() {
     setViewMode(true);
     setModalId(modalId === id ? MODALS_ENUM.NONE : id);
@@ -16,7 +18,7 @@ export function Requestor() {
 
   return (
     <ButtonContainer>
-      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={false} />
+      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={!forms.items.length} />
     </ButtonContainer>
   );
 }

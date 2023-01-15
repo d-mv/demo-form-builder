@@ -1,3 +1,4 @@
+import { as } from '@mv-d/toolbelt';
 import { FastifyPluginAsync } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import { Server, ServerOptions } from 'socket.io';
@@ -25,7 +26,7 @@ export const fastifySocketIoPlugin: FastifyPluginAsync<Partial<ServerOptions>> =
 );
 
 export function wsProvider(app: undefined) {
-  const { io } = app as unknown as FastifyServer;
+  const { io } = as<FastifyServer>(app);
 
   WsService.init(io);
 }
