@@ -1,9 +1,10 @@
-import { ActionWithPayload, AnyValue, PromisedResult, success, failure, Action } from '@mv-d/toolbelt';
+import { ActionWithPayload, AnyValue, R, PromisedResult, success, failure, Action } from '@mv-d/toolbelt';
 
 import { FormItem, FormModal } from '../schemas/forms.schema';
 
 export const DB_ACTIONS_ENUM = {
   ADD_NEW_FORM: 'addNewForm',
+  GET_FORMS: 'getForm',
 } as const;
 
 type DbActionsEnumKeys = keyof typeof DB_ACTIONS_ENUM;
@@ -25,6 +26,16 @@ DB_PROVIDER_MAP.set(
     }
   },
 );
+
+DB_PROVIDER_MAP.set(DB_ACTIONS_ENUM.GET_FORMS, async (): PromisedResult<FormItem[]> => {
+  try {
+    const result = await FormModal.find({});
+
+    return success(result.map(item => R.omit(['_id'], item.toJSON())));
+  } catch (err) {
+    return failure(err as Error);
+  }
+});
 
 export async function dbProvider<Payload = void>(action: Action<DbActions, Payload>) {
   const fn = DB_PROVIDER_MAP.get(action.type);

@@ -1,22 +1,39 @@
-import { Optional } from '@mv-d/toolbelt';
-import { useCallback, useEffect, useState } from 'react';
+import { R, axios, getMessageFromError } from '@mv-d/toolbelt';
 import { useSetRecoilState } from 'recoil';
-import { alertsSelector } from '../state';
-import { HttpServiceClass } from './http.service';
+import { CONFIG } from '../config';
+import { alertsSelector, FormItem, FormItemDb, formsSelector } from '../state';
+
+function stringifyFormData(form: FormItem) {
+  return { ...form, data: JSON.stringify(form.data) };
+}
 
 export function useHttpService() {
   const setAlert = useSetRecoilState(alertsSelector);
 
-  const [service, setService] = useState<Optional<HttpServiceClass>>();
+  const addForm = useSetRecoilState(formsSelector);
 
-  const sendAlertMessage = useCallback(() => {
+  async function sendForm(form: FormItem) {
+    try {
+      await axios.default.post(CONFIG.services.backend + '/api/v1/forms', stringifyFormData(form));
+
+      addForm([form]);
+    } catch (err) {
+      R.compose(setAlert, getMessageFromError)(err);
+    }
+  }
+
+  async function getForms() {
     // eslint-disable-next-line no-console
     console.log('hello');
 
-    setAlert('Disconnected!');
-  }, [setAlert]);
+    try {
+      const result = await axios.default.get<FormItemDb[]>(CONFIG.services.backend + '/api/v1/forms');
 
-  useEffect(() => {
-    if (!service) setService(new HttpServiceClass(sendAlertMessage));
-  }, [sendAlertMessage, service]);
+      addForm(result.data.map(d => ({ ...d, data: JSON.parse(d.data) })));
+    } catch (err) {
+      R.compose(setAlert, getMessageFromError)(err);
+    }
+  }
+
+  return { sendForm, getForms };
 }

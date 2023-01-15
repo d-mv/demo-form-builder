@@ -19,7 +19,7 @@ export const app: FastifyServer = fastify({
     transport: {
       target: 'pino-pretty',
       options: {
-        colorize: CONFIG.isTest,
+        colorize: !CONFIG.isProduction,
       },
     },
   },

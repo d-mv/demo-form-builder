@@ -4,9 +4,8 @@ import helmet from '@fastify/helmet';
 import caching from '@fastify/caching';
 
 import { fastifySocketIoPlugin, wsProvider } from '../providers';
-// import { apiRouter_v1, generalRouter } from '../routes';
 import { app, logger } from './config.server';
-import { generalRouter } from '../routes';
+import { apiRouter_v1, generalRouter } from '../routes';
 
 export async function startServer(port: number) {
   // plugins
@@ -17,7 +16,7 @@ export async function startServer(port: number) {
   app.register(fastifySocketIoPlugin, { cors: { origin: '*' } });
 
   // routes
-  // app.register(apiRouter_v1, { prefix: 'api/v1' });
+  app.register(apiRouter_v1, { prefix: 'api/v1' });
   app.register(generalRouter, { prefix: '/' });
 
   app.ready().then(wsProvider);

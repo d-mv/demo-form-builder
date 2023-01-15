@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { formsPostController } from '../controllers';
+
+import { formsGetController, formsPostController } from '../controllers';
 import { FormItem } from '../schemas/forms.schema';
 
 export function apiRouter_v1(
@@ -7,17 +8,20 @@ export function apiRouter_v1(
   _opts: Record<string, unknown>, // ?
   next: (err?: Error | undefined) => void,
 ) {
-  // get all flags
-  /* server.get('/flags', () => ''); */
+  server.get('/forms', async (_, res) => {
+    const result = await formsGetController();
 
-  // get flag by id
+    if (result.isOK) return res.send(result.payload);
+    else return res.code(400).send(result.error.message);
+  });
+
   server.post<{ Body: FormItem }>('/forms', async (req, res) => {
     const form = req.body;
 
     const result = await formsPostController(form);
 
-    if (result.isOK) res.send(result.payload);
-    else res.code(400).send(result.error.message);
+    if (result.isOK) return res.send(result.payload);
+    else return res.code(400).send(result.error.message);
   });
 
   next();

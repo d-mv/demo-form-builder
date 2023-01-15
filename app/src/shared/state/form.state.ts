@@ -1,11 +1,17 @@
 import { TaskData } from 'react-form-builder2';
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 
 export type FormItem = {
   id: string;
   name: string;
   // possibly string?
   data: TaskData[];
+};
+
+export type FormItemDb = {
+  id: string;
+  name: string;
+  data: string;
 };
 
 export const formReviewState = atom<FormItem>({
@@ -127,4 +133,19 @@ export const forms = atom<FormItem[]>({
 export const formsSelector = selector({
   key: 'forms/items/selector',
   get: ({ get }) => get(forms),
+  set: ({ set, get }, v) => {
+    if (v instanceof DefaultValue) {
+      set(forms, v);
+      return;
+    }
+
+    // ids of incoming forms
+    const ids = v.map(f => f.id);
+
+    // remove existing duplicates
+    const current = get(forms).filter(f => !ids.includes(f.id));
+
+    current.push(...v);
+    set(forms, current);
+  },
 });

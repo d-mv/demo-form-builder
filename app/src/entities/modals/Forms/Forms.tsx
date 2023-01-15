@@ -1,4 +1,5 @@
 import { ifTrue } from '@mv-d/toolbelt';
+import { useEffect } from 'react';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import {
@@ -12,6 +13,7 @@ import {
   modalIdSelector,
   MODALS_ENUM,
   formViewState,
+  useHttpService,
 } from '../../../shared';
 import { formBuilderSelector, formBuilderState } from '../../administrator/Constructor';
 import classes from './Forms.module.scss';
@@ -32,6 +34,12 @@ export default function Forms() {
   const isViewMode = useRecoilValue(formViewState);
 
   const setBuilderForm = useSetRecoilState(formBuilderSelector);
+
+  const { getForms } = useHttpService();
+
+  useEffect(() => {
+    if (isViewMode) getForms();
+  }, [getForms, isViewMode]);
 
   function handleClose() {
     closeModal();
@@ -78,6 +86,9 @@ export default function Forms() {
       </button>
     );
   }
+
+  // eslint-disable-next-line no-console
+  console.log(isViewMode);
 
   return (
     <Container>
