@@ -2,7 +2,7 @@ import { Optional } from '@mv-d/toolbelt';
 import { Server } from 'socket.io';
 
 import { CONFIG } from '../config';
-import { addFormController, getFormsController, sendFormController } from '../controllers';
+import { addAnswersController, addFormController, getFormsController, sendFormController } from '../controllers';
 import { logger } from '../server';
 
 class WsServiceClass {
@@ -19,6 +19,7 @@ class WsServiceClass {
       socket.on('sendForm', sendFormController);
       socket.on('addForm', addFormController);
       socket.on('getForms', getFormsController);
+      socket.on('addAnswers', addAnswersController);
 
       socket.on('filledForm', (...data: unknown[]) => {
         logger.info(data, 'filledForm');
@@ -26,8 +27,14 @@ class WsServiceClass {
     });
   }
 
+  send(action: string, payload: unknown): boolean;
+
+  send(action: string): (payload: unknown) => boolean;
+
   send(action: string, payload?: unknown) {
-    this.#connection && this.#connection.emit(action, payload);
+    if (!payload) return (payload: unknown) => this.#connection && this.#connection.emit(action, payload);
+
+    return this.#connection && this.#connection.emit(action, payload);
   }
 }
 

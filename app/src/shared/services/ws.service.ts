@@ -1,4 +1,4 @@
-import { failure, io, PromisedResult, Socket, success } from '@mv-d/toolbelt';
+import { failure, io, logger, PromisedResult, Socket, success } from '@mv-d/toolbelt';
 
 import { CONFIG } from '../config';
 
@@ -14,14 +14,11 @@ class WsServiceClass {
 
     if (connection) {
       connection.on('connect', () => {
-        // eslint-disable-next-line no-console
-        console.log('Connected to backend');
+        logger.info('Connected');
       });
 
-      // TODO: do we need this?
       connection.on('welcome', (message: string) => {
-        // eslint-disable-next-line no-console
-        console.log(message);
+        logger.info(message);
       });
 
       // TODO: do we need this?

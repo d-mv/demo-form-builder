@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { AnyValue } from '@mv-d/toolbelt';
 import { FormBuilderPostData, ReactFormBuilder, TaskData } from 'react-form-builder2';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import {
   formBuilderState,
   formErrorState,
   FormName,
+  formReviewSelector,
   Header,
   ModalFooterButtons,
   modalIdState,
@@ -22,6 +23,8 @@ import { ModalsContext } from '../../modals';
 
 export default function Constructor() {
   const ref = useRef<AnyValue>(null);
+
+  const { send } = useWsService();
 
   const closeModal = useResetRecoilState(modalIdState);
 
@@ -77,8 +80,6 @@ export default function Constructor() {
 
     setForm({ ...form, name });
   }
-
-  const { send } = useWsService();
 
   function handleFooterClick(id: string) {
     if (id === ModalFooterButtons.CANCEL) closeModal();

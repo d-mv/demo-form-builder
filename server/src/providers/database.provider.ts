@@ -1,6 +1,6 @@
 import { ActionWithPayload, AnyValue, R, PromisedResult, success, failure, Action } from '@mv-d/toolbelt';
 
-import { FormItem, FormModal } from '../schemas/forms.schema';
+import { FormItem, FormModel } from '../schemas/forms.schema';
 
 export const DB_ACTIONS_ENUM = {
   ADD_NEW_FORM: 'addNewForm',
@@ -19,7 +19,7 @@ DB_PROVIDER_MAP.set(
   DB_ACTIONS_ENUM.ADD_NEW_FORM,
   async (action: ActionWithPayload<FormItem>): PromisedResult<string> => {
     try {
-      await FormModal.create(action.payload);
+      await FormModel.create(action.payload);
       return success('OK');
     } catch (err) {
       return failure(err as Error);
@@ -29,7 +29,7 @@ DB_PROVIDER_MAP.set(
 
 DB_PROVIDER_MAP.set(DB_ACTIONS_ENUM.GET_FORMS, async (): PromisedResult<FormItem[]> => {
   try {
-    const result = await FormModal.find({});
+    const result = await FormModel.find({});
 
     return success(result.map(item => R.omit(['_id'], item.toJSON())));
   } catch (err) {

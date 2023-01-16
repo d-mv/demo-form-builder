@@ -1,39 +1,52 @@
-import { AnyValue } from '@mv-d/toolbelt';
-import { useContext, useEffect, useRef } from 'react';
+import rfdc from 'rfdc';
 import { FormGeneratorOnSubmitParams, ReactFormGenerator } from 'react-form-builder2';
-import { useRecoilValue } from 'recoil';
-import { formReviewSelector } from '../../../shared';
-import { ModalsContext } from '../modals.context';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+
+import {
+  Body,
+  Container,
+  formAnswersState,
+  formReviewSelector,
+  formViewState,
+  Header,
+  modalIdSelector,
+  useWsService,
+} from '../../../shared';
 import classes from './UseForm.module.scss';
 
+const clone = rfdc({ proto: false, circles: false });
+
 export default function UseForm() {
-  const ref = useRef<AnyValue>(null);
-
-  const { onLoad } = useContext(ModalsContext);
-
   const form = useRecoilValue(formReviewSelector);
 
-  // initial loading of the library can be slow => Modals is rendering
-  // 'Loading...'; once library is rendering, call to Modals to remove it
-  useEffect(() => {
-    if (ref.current) onLoad();
-  }, [ref, onLoad]);
+  const resetForm = useResetRecoilState(formViewState);
+
+  const closeModal = useResetRecoilState(modalIdSelector);
+
+  const { send } = useWsService();
 
   function handleSubmitAnswers(info: FormGeneratorOnSubmitParams[]) {
-    // eslint-disable-next-line no-console
-    console.log(info);
+    if (!form) return;
+
+    resetForm();
+    send('addAnswers', { formId: form?.id, formName: form?.name, data: info });
   }
 
+  if (!form) return null;
+
   return (
-    <div className={classes.container}>
-      <ReactFormGenerator
-        ref={ref}
-        saveAlways={true}
-        onSubmit={handleSubmitAnswers}
-        // onPost={handleChange}
-        // @ts-ignore -- data is missing in types, but available
-        data={form?.data}
-      />
-    </div>
+    <Container>
+      <Header onClick={closeModal} title={form.name} />
+      <Body className={classes.container}>
+        <ReactFormGenerator
+          // required prop
+          form_action=''
+          // required prop
+          form_method=''
+          onSubmit={handleSubmitAnswers}
+          data={form.data.map(clone)}
+        />
+      </Body>
+    </Container>
   );
 }

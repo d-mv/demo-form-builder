@@ -1,0 +1,25 @@
+.container {
+  padding: 2rem;
+  padding-top: 0;
+  overflow: inherit;
+
+  label {
+    font-size: 1.6rem;
+  }
+
+  p,
+  input,
+  [class*='multiValue'],
+  [class*='placeholder'],
+  [class*='menu'] {
+    font-size: 1.4rem;
+  }
+
+  [class='btn-toolbar'] {
+    justify-content: flex-end;
+    input {
+      border: 0.1rem solid black;
+      width: fit-content;
+    }
+  }
+}

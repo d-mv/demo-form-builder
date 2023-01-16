@@ -24,9 +24,15 @@ export function useWsService() {
     [setAlert, setFormToFill],
   );
 
+  const handleNewAnswers = useCallback((form: FormItem) => {
+    // eslint-disable-next-line no-console
+    console.log(form);
+  }, []);
+
   useEffect(() => {
     WsService.subscribe('newFormToFill', handleNewForm);
-  }, [handleNewForm]);
+    WsService.subscribe('newAnswersAdded', handleNewAnswers);
+  }, [handleNewAnswers, handleNewForm]);
 
   async function send<T>(action: string, payload?: AnyValue) {
     return await WsService.send<T>(action, payload);
@@ -37,12 +43,15 @@ export function useWsService() {
 
     const result = await WsService.send<Result<FormItem[]>>('getForms');
 
+    // eslint-disable-next-line no-console
+    console.log(result);
+
     // result #1 for socket, result #2 from server
     if (result.isOK && result.payload.isOK) {
       const data = result.payload.payload;
 
       setForms({ isLoading: false, items: data });
-      setAlert(`Got ${data.length} new form(s)`);
+      setAlert(`Got ${data.length} form(s)`);
     } else {
       // TODO: safe logging of action through the app
       setForms({ isLoading: false, items: forms.items });

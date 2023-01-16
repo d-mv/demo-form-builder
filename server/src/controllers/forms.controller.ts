@@ -1,10 +1,10 @@
-import { R, success, failure, as } from '@mv-d/toolbelt';
-import { MongooseError } from 'mongoose';
+import { R, success, failure, as, serializeJavascript, AnyValue } from '@mv-d/toolbelt';
+import { Document, MongooseError, Types } from 'mongoose';
 
 import { dbProvider, DB_ACTIONS_ENUM } from '../providers';
-import { FormItem, FormModal } from '../schemas';
+import { AnswerItem, AnswerModel, FormItem, FormModel } from '../schemas';
 import { WsService } from '../services';
-import { errorLogger, infoLogger } from '../tools';
+import { errorLogger, infoLogger, parseData, toJson } from '../tools';
 
 // TODO: remove?
 export function formsPostController(payload: FormItem) {
@@ -14,6 +14,26 @@ export function formsPostController(payload: FormItem) {
 // TODO: remove?
 export function formsGetController() {
   return dbProvider({ type: DB_ACTIONS_ENUM.GET_FORMS });
+}
+
+export async function addAnswersController(answers: AnswerItem) {
+  const logger = errorLogger('addAnswersController');
+
+  // TODO: provide standard way of sending errors
+  if (!answers) {
+    logger('Incorrect argument');
+    return;
+  }
+
+  try {
+    const result = await AnswerModel.create({ ...answers, data: serializeJavascript(answers.data) });
+
+    if (result._id) WsService.send('newAnswersAdded', answers);
+    else logger('Answers not created');
+  } catch (err) {
+    logger(as<MongooseError>(err).message);
+    WsService.send('error', err);
+  }
 }
 
 export async function addFormController(form: FormItem) {
@@ -26,7 +46,7 @@ export async function addFormController(form: FormItem) {
   }
 
   try {
-    const result = await FormModal.create({ ...form, data: JSON.stringify(form.data) });
+    const result = await FormModel.create({ ...form, data: serializeJavascript(form.data) });
 
     if (result._id) WsService.send('newFormAdded', form);
     else logger('Form not created');
@@ -43,7 +63,7 @@ export async function sendFormController(formId: string) {
     return;
   }
 
-  const results = await FormModal.find({ id: formId });
+  const results = await FormModel.find({ id: formId });
 
   const form = results[0];
 
@@ -55,18 +75,27 @@ export async function sendFormController(formId: string) {
 
   const inJson = form.toJSON();
 
-  WsService.send('newFormToFill', { ...inJson, data: JSON.parse(inJson.data) });
+  WsService.send('newFormToFill', { ...inJson, data: eval(inJson.data) });
 }
+
+type ItemType<Item> = Document<unknown, AnyValue, Item> & Item & { _id: Types.ObjectId };
 
 // ignore the first argument, as the request will come empty payload
 export async function getFormsController(_: unknown, callback: (...data: unknown[]) => void) {
   try {
-    const results = await FormModal.find({});
+    const results = await FormModel.find({});
 
-    R.pipe(
-      success,
-      callback,
-    )(results.map(item => item.toJSON()).map(item => ({ ...item, data: JSON.parse(item.data) })));
+    R.compose(callback, success, R.map(parseData), R.map(toJson<ItemType<FormItem>>))(results);
+  } catch (err) {
+    R.compose(callback, failure)(err);
+  }
+}
+
+export async function getAnswers(_: unknown, callback: (...data: unknown[]) => void) {
+  try {
+    const results = await AnswerModel.find({});
+
+    R.compose(callback, success, R.map(parseData), R.map(toJson<ItemType<AnswerItem>>))(results);
   } catch (err) {
     R.compose(callback, failure)(err);
   }
