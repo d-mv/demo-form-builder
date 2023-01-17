@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { alertsSelector, alertsState, Icon } from '../../shared';
-import classes from './Alrts.module.scss';
+import classes from './Alerts.module.scss';
 
 export function Alerts() {
   const alert = useRecoilValue(alertsSelector);
@@ -24,11 +24,11 @@ export function Alerts() {
   if (!alert) return null;
 
   return (
-    <div className={clsx('animate__animated animate__flipInX', classes.container)}>
+    <div className={clsx('animate__animated animate__flipInX', classes.container, classes[alert.type])}>
       <span className={classes.icon}>
-        <Icon icon='alert' />
+        <Icon icon={alert.type === 'error' ? 'error' : 'alert'} />
       </span>
-      <p className='p2'>{alert}</p>
+      <p className='p2'>{alert.message}</p>
     </div>
   );
 }

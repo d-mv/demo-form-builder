@@ -1,8 +1,9 @@
-import { AnyValue, Result } from '@mv-d/toolbelt';
+import { R, AnyValue, Result } from '@mv-d/toolbelt';
 import { useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { alertsSelector, formReviewSelector, formsSelector } from '../state';
+import { makeInfo } from '../tools';
 import { FormItem } from '../types';
 import { WsService } from './ws.service';
 
@@ -19,7 +20,7 @@ export function useWsService() {
   const handleNewForm = useCallback(
     (form: FormItem) => {
       setFormToFill(form);
-      setAlert(`A new form to fill ${form.name}`);
+      R.compose(setAlert, makeInfo)(`A new form to fill ${form.name}`);
     },
     [setAlert, setFormToFill],
   );
@@ -51,7 +52,7 @@ export function useWsService() {
       const data = result.payload.payload;
 
       setForms({ isLoading: false, items: data });
-      setAlert(`Got ${data.length} form(s)`);
+      R.compose(setAlert, makeInfo)(`Got ${data.length} form(s)`);
     } else {
       // TODO: safe logging of action through the app
       setForms({ isLoading: false, items: forms.items });

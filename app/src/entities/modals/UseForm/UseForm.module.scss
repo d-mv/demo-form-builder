@@ -18,8 +18,46 @@
   [class='btn-toolbar'] {
     justify-content: flex-end;
     input {
-      border: 0.1rem solid black;
-      width: fit-content;
+      -webkit-user-select: none;
+      background-color: transparent;
+      border-radius: 0.2rem;
+      border: none;
+      border-bottom: 0.3rem solid transparent;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      touch-action: manipulation;
+      transition: var(--transition_2ms);
+      user-select: none;
+      vertical-align: middle;
+      font-family: var(--font-family-sans);
+
+      padding-top: 0.6rem; // offset because of border
+
+      background: linear-gradient(var(--color-primary-2), var(--color-primary-1));
+      color: var(--color-white);
+      border-bottom-color: var(--color-primary-1);
+
+      &:hover {
+        border-bottom-color: var(--color-accent-1);
+      }
+
+      &:active {
+        background: linear-gradient(var(--color-primary-1), var(--color-primary-1));
+      }
+
+      &:disabled {
+        background: linear-gradient(var(--color-primary-3), var(--color-primary-3));
+        border-bottom-color: var(--color-primary-3);
+        color: var(--color-primary-2);
+      }
+
+      &:disabled:hover {
+        box-shadow: none;
+      }
     }
   }
 }

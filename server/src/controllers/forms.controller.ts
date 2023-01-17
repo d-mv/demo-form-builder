@@ -19,6 +19,9 @@ export function formsGetController() {
 export async function addAnswersController(answers: AnswerItem) {
   const logger = errorLogger('addAnswersController');
 
+  // eslint-disable-next-line no-console
+  console.log(answers);
+
   // TODO: provide standard way of sending errors
   if (!answers) {
     logger('Incorrect argument');

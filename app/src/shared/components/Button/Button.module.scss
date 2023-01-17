@@ -1,4 +1,6 @@
 .container {
+  -webkit-user-select: none;
+  user-select: none;
   display: flex;
   appearance: none;
   outline: none;
@@ -9,6 +11,7 @@
   color: var(--color-white);
   box-shadow: var(--shadow-primary-4);
   cursor: pointer;
+  font-size: 1.6rem;
 
   &:hover:not(:disabled) {
     border: var(--border-accent-2);
@@ -38,4 +41,3 @@
     color: var(--color-text);
   }
 }
-

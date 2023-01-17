@@ -66,3 +66,32 @@
 /* list of added items */
 .Sortable {
 }
+
+/* render form */
+.alert-danger {
+  background-color: var(--color-error-1);
+  border-color: transparent;
+  color: var(--color-white);
+}
+
+.alert-danger .fa-exclamation-triangle {
+  font-size: 1.6rem;
+}
+
+.alert-danger ul {
+  font-size: 1.6rem;
+}
+
+.alert-danger a {
+  padding: 0.5rem 0.8rem;
+  font-size: 1.2rem;
+}
+
+.alert-danger .btn {
+  border-bottom: 0.2rem solid #dc3545;
+  padding-block-end: 0.2rem;
+}
+
+.alert-danger .btn:hover {
+  border-bottom: 0.2rem solid var(--color-white);
+}

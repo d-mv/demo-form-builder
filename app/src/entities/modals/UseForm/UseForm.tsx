@@ -1,14 +1,16 @@
 import rfdc from 'rfdc';
+import { R } from '@mv-d/toolbelt';
 import { FormGeneratorOnSubmitParams, ReactFormGenerator } from 'react-form-builder2';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import {
+  alertsState,
   Body,
   Container,
-  formAnswersState,
   formReviewSelector,
   formViewState,
   Header,
+  makeError,
   modalIdSelector,
   useWsService,
 } from '../../../shared';
@@ -19,6 +21,8 @@ const clone = rfdc({ proto: false, circles: false });
 export default function UseForm() {
   const form = useRecoilValue(formReviewSelector);
 
+  const setAlert = useSetRecoilState(alertsState);
+
   const resetForm = useResetRecoilState(formViewState);
 
   const closeModal = useResetRecoilState(modalIdSelector);
@@ -28,8 +32,15 @@ export default function UseForm() {
   function handleSubmitAnswers(info: FormGeneratorOnSubmitParams[]) {
     if (!form) return;
 
+    // eslint-disable-next-line no-console
+    console.log(info);
+
+    // if at least some are missing answers -> raise error
+    if (info.some(el => !el.value || R.isNil(el.value))) return R.compose(setAlert, makeError)('No input');
+
     resetForm();
     send('addAnswers', { formId: form?.id, formName: form?.name, data: info });
+    closeModal();
   }
 
   if (!form) return null;
