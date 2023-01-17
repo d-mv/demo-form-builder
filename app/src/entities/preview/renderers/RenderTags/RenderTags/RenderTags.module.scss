@@ -1,0 +1,15 @@
+.container {
+	display: flex;
+	flex-flow: column;
+}
+
+.items {
+	display: flex;
+	flex-flow: row wrap;
+	list-style-type: none;
+	padding: 1rem 0;
+
+	*+* {
+		margin-inline-start: 2rem;
+	}
+}

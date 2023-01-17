@@ -8,11 +8,16 @@ interface ButtonProps {
   label: string;
   isOpen: boolean;
   isDisabled: boolean;
+  className?: string;
 }
 
-export function Button({ onClick, label, isOpen, isDisabled }: ButtonProps) {
+export function Button({ className, onClick, label, isOpen, isDisabled }: ButtonProps) {
   return (
-    <button disabled={isDisabled} className={clsx(classes.container, { [classes.open]: isOpen })} onClick={onClick}>
+    <button
+      disabled={isDisabled}
+      className={clsx(classes.container, { [classes.open]: isOpen }, className)}
+      onClick={onClick}
+    >
       {label}
     </button>
   );

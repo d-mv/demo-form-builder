@@ -46,7 +46,7 @@ export default function Forms() {
     return function call() {
       if (isViewMode) return sendForm(id);
 
-      const form = forms.items.find(f => f.id === id);
+      const form = forms.items.find(f => f._id === id);
 
       if (!form) {
         // eslint-disable-next-line no-console
@@ -67,7 +67,7 @@ export default function Forms() {
   }
 
   function renderFormButton(form: FormItem) {
-    return <FormButton key={form.id} id={form.id} label={form.name} onClick={handleClick(form.id)} />;
+    return <FormButton key={form._id} id={form._id} label={form.name} onClick={handleClick(form._id)} />;
   }
 
   function renderAddNewButton() {

@@ -20,10 +20,10 @@ export const formsSelector = selector({
     }
 
     // ids of incoming forms
-    const ids = v.items.map(f => f.id);
+    const ids = v.items.map(f => f._id);
 
     // remove existing duplicates
-    const current = get(forms).items.filter(f => !ids.includes(f.id));
+    const current = get(forms).items.filter(f => !ids.includes(f._id));
 
     current.push(...v.items);
     set(forms, { ...v, items: current });

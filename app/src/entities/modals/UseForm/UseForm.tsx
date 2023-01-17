@@ -33,13 +33,24 @@ export default function UseForm() {
     if (!form) return;
 
     // eslint-disable-next-line no-console
-    console.log(info);
+    console.log(form, info);
 
     // if at least some are missing answers -> raise error
     if (info.some(el => !el.value || R.isNil(el.value))) return R.compose(setAlert, makeError)('No input');
 
+    // Add
+    const data = info.map(el => {
+      // @ts-ignore -- temp
+      const item = form.data.find(f => f.field_name === el.name);
+
+      if (!item) return el;
+
+      // @ts-ignore -- temp
+      return { ...el, label: item.label, element: item.element };
+    });
+
     resetForm();
-    send('addAnswers', { formId: form?.id, formName: form?.name, data: info });
+    send('addAnswers', { formId: form?._id, formName: form?.name, data });
     closeModal();
   }
 

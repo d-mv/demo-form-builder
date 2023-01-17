@@ -2,9 +2,9 @@ import { R, AnyValue, Result } from '@mv-d/toolbelt';
 import { useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { alertsSelector, formReviewSelector, formsSelector } from '../state';
+import { alertsSelector, formAnswersState, formReviewSelector, formsSelector } from '../state';
 import { makeInfo } from '../tools';
-import { FormItem } from '../types';
+import { FormAnswers, FormItem } from '../types';
 import { WsService } from './ws.service';
 
 export function useWsService() {
@@ -13,6 +13,8 @@ export function useWsService() {
   const forms = useRecoilValue(formsSelector);
 
   const setForms = useSetRecoilState(formsSelector);
+
+  const setAnswers = useSetRecoilState(formAnswersState);
 
   const setFormToFill = useSetRecoilState(formReviewSelector);
 
@@ -25,10 +27,13 @@ export function useWsService() {
     [setAlert, setFormToFill],
   );
 
-  const handleNewAnswers = useCallback((form: FormItem) => {
-    // eslint-disable-next-line no-console
-    console.log(form);
-  }, []);
+  const handleNewAnswers = useCallback(
+    (answers: FormAnswers) => {
+      setAnswers(answers);
+      R.compose(setAlert, makeInfo)(`New answers arrived for ${answers.formName} form`);
+    },
+    [setAlert, setAnswers],
+  );
 
   useEffect(() => {
     WsService.subscribe('newFormToFill', handleNewForm);

@@ -1,4 +1,3 @@
-import { generateId } from '@mv-d/toolbelt';
 import { atom, selector } from 'recoil';
 
 import { FormItem } from '../types';
@@ -10,7 +9,7 @@ export const formErrorState = atom<string>({
 
 export const formBuilderState = atom<FormItem>({
   key: 'form/builder',
-  default: { data: [], name: '', id: generateId() },
+  default: { data: [], name: '', _id: '' },
 });
 
 export const formBuilderSelector = selector({

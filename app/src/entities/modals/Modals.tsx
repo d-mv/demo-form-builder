@@ -4,6 +4,7 @@ import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { Dialog, LazyLoad, Modal, modalIdState, MODALS_ENUM } from '../../shared';
 import { Constructor } from '../administrator';
+import { PreviewContainer } from '../preview';
 import { Forms } from './Forms';
 import { ModalsContext } from './modals.context';
 import { UseForm } from './UseForm';
@@ -14,6 +15,7 @@ const MODAL_CONTENTS = makeMatch(
     [MODALS_ENUM.FORMS]: { component: Forms },
     [MODALS_ENUM.REVIEW]: { component: UseForm },
     [MODALS_ENUM.FORM_EDIT]: { component: Constructor, style: { width: '80rem', maxHeight: '80vh' }, isLoading: true },
+    [MODALS_ENUM.ANSWERS]: { component: PreviewContainer },
   },
   () => {
     null;
@@ -60,6 +62,7 @@ export function Modals() {
         <ModalsContext.Provider value={{ onLoad: () => setIsLoading(false) }}>
           <LazyLoad>
             <Component />
+            {/* <PreviewContainer /> */}
           </LazyLoad>
           {ifTrue(isLoading, renderLoading)}
         </ModalsContext.Provider>

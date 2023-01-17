@@ -66,7 +66,7 @@ export async function sendFormController(formId: string) {
     return;
   }
 
-  const results = await FormModel.find({ id: formId });
+  const results = await FormModel.find({ _id: formId });
 
   const form = results[0];
 

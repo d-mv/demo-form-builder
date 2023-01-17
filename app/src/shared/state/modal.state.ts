@@ -8,6 +8,7 @@ export const MODALS_ENUM = {
   REVIEW: 'Review',
   ADD_NEW: 'addNew',
   NONE: 'none',
+  ANSWERS: 'answers',
 } as const;
 
 type ModalsEnumKeys = keyof typeof MODALS_ENUM;

@@ -4,9 +4,10 @@
 
 [x] Spinner, while loading library first time
 [x] Load from db on start
-[] Push new form
+[x] Push new form
 [x] Send to backend
-[] Fill out mode for Reviewer
-[] Send to backend results
-[] Push to front when saved
+[x] Fill out mode for Reviewer
+[x] Send to backend results
+[x] Push to front when saved
+[] Render results
 
