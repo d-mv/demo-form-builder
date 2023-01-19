@@ -2,20 +2,19 @@ import { R, success, failure, serializeJavascript, AnyValue } from '@mv-d/toolbe
 import { Document, Types } from 'mongoose';
 import { CONFIG } from '../config';
 
-import { dbProvider, DB_ACTIONS_ENUM } from '../providers';
 import { AnswerItem, AnswerModel, FormItem, FormModel } from '../schemas';
 import { logger } from '../server';
 import { WsService } from '../services';
 import { parseData, toJson } from '../tools';
 
-// TODO: remove?
-export function formsPostController(payload: FormItem) {
-  return dbProvider({ type: DB_ACTIONS_ENUM.ADD_NEW_FORM, payload });
-}
+export async function formsGetController() {
+  try {
+    const result = await FormModel.find({});
 
-// TODO: remove?
-export function formsGetController() {
-  return dbProvider({ type: DB_ACTIONS_ENUM.GET_FORMS });
+    return success(result);
+  } catch (err) {
+    return failure(err as Error);
+  }
 }
 
 function logArgumentIfDev(data: unknown, message?: string) {

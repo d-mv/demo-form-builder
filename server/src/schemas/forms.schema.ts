@@ -5,9 +5,12 @@ export interface FormItem {
   data: string;
 }
 
-const formItemSchema = new Schema<FormItem>({
-  name: { type: String, unique: true, required: true },
-  data: { type: String, required: true },
-});
+const formItemSchema = new Schema<FormItem>(
+  {
+    name: { type: String, unique: true, required: true },
+    data: { type: String, required: true },
+  },
+  { timestamps: true },
+);
 
 export const FormModel = model('form', formItemSchema);

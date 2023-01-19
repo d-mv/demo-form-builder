@@ -6,10 +6,13 @@ export interface AnswerItem {
   data: string;
 }
 
-const answerItemSchema = new Schema<AnswerItem>({
-  formId: { type: String, required: true },
-  formName: { type: String, required: true },
-  data: { type: String, required: true },
-});
+const answerItemSchema = new Schema<AnswerItem>(
+  {
+    formId: { type: String, required: true },
+    formName: { type: String, required: true },
+    data: { type: String, required: true },
+  },
+  { timestamps: true },
+);
 
 export const AnswerModel = model('answer', answerItemSchema);
