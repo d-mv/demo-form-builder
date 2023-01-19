@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
-import { Administrator, Alerts, Modals, Requestor, Reviewer } from '../entities';
-import { useWsService } from '../shared';
+import { Administrator, Alerts, Modals, Requestor, Reviewer } from '../../entities';
+import { Intro } from '../Intro';
+import { useWsService } from '../../shared';
 import classes from './App.module.scss';
 
 export function App() {
@@ -15,9 +16,12 @@ export function App() {
 
   return (
     <main className={classes.container}>
-      <Administrator />
-      <Requestor />
-      <Reviewer />
+      <Intro />
+      <div className={classes.row}>
+        <Administrator />
+        <Requestor />
+        <Reviewer />
+      </div>
       <Modals />
       <Alerts />
     </main>

@@ -1,8 +1,8 @@
 import { R, AnyValue, Result } from '@mv-d/toolbelt';
 import { useCallback, useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { alertsSelector, formAnswersState, formReviewSelector, formReviewState, formsSelector } from '../state';
+import { alertsSelector, formAnswersState, formReviewSelector, formsState } from '../state';
 import { makeInfo } from '../tools';
 import { FormAnswers, FormItem } from '../types';
 import { WsService } from './ws.service';
@@ -10,9 +10,7 @@ import { WsService } from './ws.service';
 export function useWsService() {
   const setAlert = useSetRecoilState(alertsSelector);
 
-  const forms = useRecoilValue(formsSelector);
-
-  const setForms = useSetRecoilState(formsSelector);
+  const [forms, setForms] = useRecoilState(formsState);
 
   const setAnswers = useSetRecoilState(formAnswersState);
 
@@ -29,8 +27,6 @@ export function useWsService() {
 
   const handleNewFormAdded = useCallback(
     (form: FormItem) => {
-      // eslint-disable-next-line no-console
-      console.log(form);
       setForms({ ...forms, items: [...forms.items, form] });
       R.compose(setAlert, makeInfo)(`Got a new form: ${form.name}`);
     },
@@ -45,23 +41,23 @@ export function useWsService() {
     [setAlert, setAnswers],
   );
 
+  // subscribe to additional events
   useEffect(() => {
     WsService.subscribe('newFormToFill', handleNewFormToFill);
     WsService.subscribe('newFormAdded', handleNewFormAdded);
     WsService.subscribe('newAnswersAdded', handleNewAnswers);
   }, [handleNewAnswers, handleNewFormAdded, handleNewFormToFill]);
 
+  // generic send event function
   async function send<T>(action: string, payload?: AnyValue) {
     return await WsService.send<T>(action, payload);
   }
 
+  // this functions runs once, onload
   const getForms = useCallback(async () => {
     setForms({ isLoading: true, items: forms.items });
 
     const result = await WsService.send<Result<FormItem[]>>('getForms');
-
-    // eslint-disable-next-line no-console
-    // console.log(result);
 
     // result #1 for socket, result #2 from server
     if (result.isOK && result.payload.isOK) {
@@ -73,7 +69,7 @@ export function useWsService() {
       // TODO: safe logging of action through the app
       setForms({ isLoading: false, items: forms.items });
     }
-  }, [forms.items, setAlert, setForms]);
+  }, [forms.items, setForms]);
 
   return { send, getForms };
 }

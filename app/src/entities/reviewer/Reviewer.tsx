@@ -15,7 +15,7 @@ export function Reviewer() {
 
   return (
     <ButtonContainer>
-      <Button isOpen={modalId === id} onClick={handleClick} label={id} isDisabled={!formToFill} />
+      <Button isOpen={modalId === id} onClick={handleClick} label='Reviewer' isDisabled={!formToFill} />
     </ButtonContainer>
   );
 }

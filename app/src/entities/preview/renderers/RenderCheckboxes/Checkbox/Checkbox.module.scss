@@ -1,12 +1,4 @@
-.items {
-	display: flex;
-	flex-flow: row wrap;
-	list-style-type: none;
-	padding-block-start: 1rem;
-
-}
-
-.item {
+.container {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;

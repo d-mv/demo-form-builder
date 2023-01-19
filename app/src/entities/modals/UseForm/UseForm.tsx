@@ -1,6 +1,6 @@
 import rfdc from 'rfdc';
-import { R } from '@mv-d/toolbelt';
-import { FormGeneratorOnSubmitParams, ReactFormGenerator } from 'react-form-builder2';
+import { AnyValue, Optional, R } from '@mv-d/toolbelt';
+import { FormGeneratorOnSubmitParams, ReactFormGenerator, TaskData, Option } from 'react-form-builder2';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import {
@@ -29,74 +29,41 @@ export default function UseForm() {
 
   const { send } = useWsService();
 
-  function handleSubmitAnswers(info: FormGeneratorOnSubmitParams[]) {
+  function handleSubmitAnswers(answers: FormGeneratorOnSubmitParams[]) {
     if (!form) return;
 
-    // eslint-disable-next-line no-console
-    console.log(form, info);
+    // if at least some answers are missing -> raise error
+    if (answers.some(answer => !answer.value || R.isNil(answer.value)))
+      return R.compose(setAlert, makeError)('No input');
 
-    // if at least some are missing answers -> raise error
-    if (info.some(el => !el.value || R.isNil(el.value))) return R.compose(setAlert, makeError)('No input');
+    function mapData(taskData: TaskData) {
+      // get every value needed
+      const item: Pick<TaskData, 'id' | 'element'> & { value?: Optional<AnyValue> } = R.pick(
+        ['bold', 'id', 'element', 'italic', 'field_name', 'text', 'label', 'custom_name'],
+        taskData,
+      );
 
-    // Add
-    // const data = info.map(el => {
-    //   // @ts-ignore -- temp
-    //   const item = form.data.find(f => f.field_name === el.name);
+      // add values
+      if (R.path(['field_name'], item)) {
+        // find value in answers, that match current data item
+        const value = answers.find(answer => answer.name === R.path(['field_name'], item))?.value;
 
-    //   if (!item) return el;
+        // mapper for checkbox options -> add isChecked property
+        const mapOptions = (option: Option) => {
+          if (value?.includes(option.key)) return { ...option, isChecked: true };
 
-    //   // @ts-ignore -- temp
-    //   return { ...el, label: item.label, element: item.element };
-    // });
+          return option;
+        };
 
-    const data = form.data.map(d => {
-      const item = {
-        ...R.pick(['bold', 'id', 'element', 'italic', 'field_name', 'text', 'label', 'custom_name'], d),
-      };
-
-      // @ts-ignore -- temp
-      if (item.field_name) {
-        // @ts-ignore -- temp
-        const value = info.find(el => el.name === item.field_name)?.value;
-
-        if (item.element === 'Checkboxes') {
-          // @ts-ignore -- temp
-          const options = d.options;
-
-          // @ts-ignore -- temp
-          // eslint-disable-next-line no-console
-          console.log(options, value);
-
-          // @ts-ignore -- temp
-          const field = options.map(o => {
-            // eslint-disable-next-line no-console
-            console.log(o);
-
-            // @ts-ignore -- temp
-            if (value?.includes(o.key)) return { ...o, isChecked: true };
-
-            return o;
-          });
-          // @ts-ignore -- temp
-          // const field = value.map(v => {
-          //   // @ts-ignore -- temp
-          //   const f = d.options.find(o => o.key === v);
-
-          //   return { text: f.text, value: f.value };
-          // });
-
-          // @ts-ignore -- temp
-          // eslint-disable-next-line no-console
-          console.log(field);
-          // @ts-ignore -- temp
-          item.value = field;
-        }
-        // @ts-ignore -- temp
+        // some element required custom processing
+        if (item.element === 'Checkboxes' && 'options' in taskData) item.value = taskData.options.map(mapOptions);
         else item.value = value;
       }
 
       return item;
-    });
+    }
+
+    const data = form.data.map(mapData);
 
     resetForm();
     send('addAnswers', { formId: form?._id, formName: form?.name, data });
@@ -105,8 +72,6 @@ export default function UseForm() {
 
   if (!form) return null;
 
-  // eslint-disable-next-line no-console
-  console.log(form.data);
   return (
     <Container>
       <Header onClick={closeModal} title={form.name} />

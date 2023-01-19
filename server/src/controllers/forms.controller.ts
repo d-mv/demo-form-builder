@@ -1,10 +1,12 @@
-import { R, success, failure, as, serializeJavascript, AnyValue } from '@mv-d/toolbelt';
-import { Document, MongooseError, Types } from 'mongoose';
+import { R, success, failure, serializeJavascript, AnyValue } from '@mv-d/toolbelt';
+import { Document, Types } from 'mongoose';
+import { CONFIG } from '../config';
 
 import { dbProvider, DB_ACTIONS_ENUM } from '../providers';
 import { AnswerItem, AnswerModel, FormItem, FormModel } from '../schemas';
+import { logger } from '../server';
 import { WsService } from '../services';
-import { errorLogger, infoLogger, parseData, toJson } from '../tools';
+import { parseData, toJson } from '../tools';
 
 // TODO: remove?
 export function formsPostController(payload: FormItem) {
@@ -16,37 +18,34 @@ export function formsGetController() {
   return dbProvider({ type: DB_ACTIONS_ENUM.GET_FORMS });
 }
 
-export async function addAnswersController(answers: AnswerItem) {
-  const logger = errorLogger('addAnswersController');
+function logArgumentIfDev(data: unknown, message?: string) {
+  if (CONFIG.isDev) logger.debug(data, message || 'LOG');
+}
 
-  // eslint-disable-next-line no-console
-  console.log(answers);
+export async function addAnswersController(answers: AnswerItem) {
+  logger.info('request::answers');
+  logArgumentIfDev(answers);
 
   // TODO: provide standard way of sending errors
-  if (!answers) {
-    logger('Incorrect argument');
-    return;
-  }
+  if (!answers) return logger.error('addAnswersController > incorrect argument');
 
   try {
     const result = await AnswerModel.create({ ...answers, data: serializeJavascript(answers.data) });
 
     if (result._id) WsService.send('newAnswersAdded', answers);
-    else logger('Answers not created');
+    else logger.error('addAnswersController > answers not created');
   } catch (err) {
-    logger(as<MongooseError>(err).message);
+    logger.error(err);
     WsService.send('error', err);
   }
 }
 
 export async function updateFormController(form: FormItem & { _id: string }) {
-  const logger = errorLogger('updateFormController');
+  logger.info('request::updateFormController');
+  logArgumentIfDev(form);
 
   // TODO: provide standard way of sending errors
-  if (!form) {
-    logger('Incorrect argument');
-    return;
-  }
+  if (!form) return logger.error('updateFormController > ncorrect argument');
 
   try {
     const result = await FormModel.updateOne(
@@ -58,47 +57,42 @@ export async function updateFormController(form: FormItem & { _id: string }) {
     if (result.modifiedCount) WsService.send('info', `Form ${form.name} has been updated`);
     else WsService.send('error', `Form ${form.name} was not updated`);
   } catch (err) {
-    logger(as<MongooseError>(err).message);
+    logger.error(err);
     WsService.send('error', err);
   }
 }
 
 export async function addFormController(form: FormItem) {
-  const logger = errorLogger('addFormController');
+  logger.info('request::addFormController');
+  logArgumentIfDev(form);
 
   // TODO: provide standard way of sending errors
-  if (!form) {
-    logger('Incorrect argument');
-    return;
-  }
+  if (!form) logger.error('addFormController > incorrect argument');
 
   try {
     const result = await FormModel.create({ ...form, data: serializeJavascript(form.data) });
 
-    if (result._id) WsService.send('newFormAdded', form);
-    else logger('Form not created');
+    if (result._id) WsService.send('newFormAdded', { ...form, _id: result._id });
+    else logger.error('addFormController > form not created');
   } catch (err) {
-    logger(as<MongooseError>(err).message);
+    logger.error(err);
     WsService.send('error', err);
   }
 }
 
 export async function sendFormController(formId: string) {
+  logger.info('request::sendFormController');
+  logArgumentIfDev(formId);
+
   // TODO: provide standard way of sending errors
-  if (!formId || typeof formId !== 'string') {
-    errorLogger('sendFormController', 'Incorrect argument');
-    return;
-  }
+  if (!formId || typeof formId !== 'string') logger.error('sendFormController > incorrect argument');
 
   const results = await FormModel.find({ _id: formId });
 
   const form = results[0];
 
   // TODO: provide standard way of sending errors
-  if (!form) {
-    infoLogger('sendFormController', 'No result found');
-    return;
-  }
+  if (!form) return logger.error('sendFormController > no result found');
 
   const inJson = form.toJSON();
 
@@ -109,6 +103,8 @@ type ItemType<Item> = Document<unknown, AnyValue, Item> & Item & { _id: Types.Ob
 
 // ignore the first argument, as the request will come empty payload
 export async function getFormsController(_: unknown, callback: (...data: unknown[]) => void) {
+  logger.info('request::getFormsController');
+
   try {
     const results = await FormModel.find({});
 
@@ -119,6 +115,8 @@ export async function getFormsController(_: unknown, callback: (...data: unknown
 }
 
 export async function getAnswers(_: unknown, callback: (...data: unknown[]) => void) {
+  logger.info('request::getAnswers');
+
   try {
     const results = await AnswerModel.find({});
 

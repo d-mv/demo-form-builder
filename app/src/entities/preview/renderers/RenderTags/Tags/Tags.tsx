@@ -12,8 +12,8 @@ export default function Tags() {
 
   function renderTag({ key, text }: { key: string; text: string }) {
     return (
-      <li>
-        <Tag key={key} value={text} />
+      <li key={key}>
+        <Tag value={text} />
       </li>
     );
   }

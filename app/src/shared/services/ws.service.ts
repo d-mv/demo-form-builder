@@ -23,8 +23,10 @@ class WsServiceClass {
 
       // TODO: do we need this?
       connection.on('error', (...data: unknown[]) => {
-        // eslint-disable-next-line no-console
-        console.log(data);
+        logger.error(`error: ${JSON.stringify(data)}`);
+      });
+      connection.on('info', (...data: unknown[]) => {
+        logger.info(`info: ${JSON.stringify(data)}`);
       });
     }
 

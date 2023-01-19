@@ -1,4 +1,4 @@
-import { ifTrue } from '@mv-d/toolbelt';
+import { ifTrue, logger } from '@mv-d/toolbelt';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import {
@@ -44,15 +44,12 @@ export default function Forms() {
 
   function handleClick(id: string) {
     return function call() {
+      // in View mode, we just send the form id, not the form itself
       if (isViewMode) return sendForm(id);
 
       const form = forms.items.find(f => f._id === id);
 
-      if (!form) {
-        // eslint-disable-next-line no-console
-        console.log(`no form found ${id}`);
-        return;
-      }
+      if (!form) return logger.error(`No form found ${id}`);
 
       setForm(id);
       setBuilderForm(form);
@@ -67,8 +64,6 @@ export default function Forms() {
   }
 
   function renderFormButton(form: FormItem) {
-    // eslint-disable-next-line no-console
-    console.log(form);
     return <FormButton key={form._id} id={form._id} label={form.name} onClick={handleClick(form._id)} />;
   }
 

@@ -1,4 +1,4 @@
-import { FormGeneratorOnSubmitParams, TaskData } from 'react-form-builder2';
+import { TaskData } from 'react-form-builder2';
 
 export type FormItem = {
   _id: string;
@@ -6,19 +6,6 @@ export type FormItem = {
   // possibly string?
   data: TaskData[];
 };
-
-export type FormItemDb = {
-  id: string;
-  name: string;
-  data: string;
-};
-
-// export interface FormAnswersDataItem extends FormGeneratorOnSubmitParams {
-//   // label is missing on non-input elements
-//   label?: string;
-//   element: string;
-//   text?: string;
-// }
 
 export interface FormItemBase {
   id: string;
@@ -38,12 +25,19 @@ export interface FormItemParagraph extends FormItemBase {
   text: string;
 }
 
+export interface FormItemCheckbox {
+  isChecked?: boolean;
+  key: `checkboxes_option_${string}`;
+  text: string;
+  value: string;
+}
+
 export interface FormItemCheckboxes extends FormItemBase {
   element: 'Checkboxes';
   field_name: string;
   label: string;
   text: string;
-  value: string[];
+  value: FormItemCheckbox[];
 }
 
 export interface FormItemTag {

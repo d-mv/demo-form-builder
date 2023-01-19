@@ -67,12 +67,10 @@ specifiers:
   react-app-polyfill: ^3.0.0
   react-dev-utils: ^12.0.1
   react-dnd: ^16.0.1
-  react-dnd-html5-backend: '16'
   react-dom: ^18.2.0
   react-form-builder2: ^0.14.2
   react-icons: ^4.7.1
   react-refresh: ^0.11.0
-  react-spinners: ^0.13.7
   recoil: ^0.7.6
   resolve: ^1.20.0
   resolve-url-loader: ^4.0.0
@@ -158,12 +156,10 @@ dependencies:
   react-app-polyfill: 3.0.0
   react-dev-utils: 12.0.1_ztinast3o6ojylpg2e7ubjmesm
   react-dnd: 16.0.1_ybp327pta6ve5c6r5fhhqgdape
-  react-dnd-html5-backend: 16.0.1
   react-dom: 18.2.0_react@18.2.0
   react-form-builder2: 0.14.2_z3u7vkl3tzahqf3lfdyqjhn3mq
   react-icons: 4.7.1_react@18.2.0
   react-refresh: 0.11.0
-  react-spinners: 0.13.7_biqbaboplfbrettd7655fr4n2y
   recoil: 0.7.6_biqbaboplfbrettd7655fr4n2y
   resolve: 1.22.1
   resolve-url-loader: 4.0.0
@@ -9289,12 +9285,6 @@ packages:
       dnd-core: 11.1.3
     dev: false
 
-  /react-dnd-html5-backend/16.0.1:
-    resolution: {integrity: sha512-Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==}
-    dependencies:
-      dnd-core: 16.0.1
-    dev: false
-
   /react-dnd/11.1.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-8rtzzT8iwHgdSC89VktwhqdKKtfXaAyC4wiqp0SywpHG12TTLvfOoL6xNEIUWXwIEWu+CFfDn4GZJyynCEuHIQ==}
     peerDependencies:
@@ -9516,16 +9506,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       signature_pad: 2.3.2
       trim-canvas: 0.1.2
-    dev: false
-
-  /react-spinners/0.13.7_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-mRamn56bfxWbGcacif5RT3UbeJaXi2AttjtPwSmomuv2IcxjpbfETCzdTvaQpNDk0E33ENJsStsQeKAZFuJcpA==}
-    peerDependencies:
-      react: ^16.0.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-textarea-autosize/7.1.2_react@18.2.0:

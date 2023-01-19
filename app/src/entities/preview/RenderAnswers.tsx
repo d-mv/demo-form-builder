@@ -1,7 +1,7 @@
 import { makeMatch } from '@mv-d/toolbelt';
 import { useRecoilValue } from 'recoil';
 
-import { FormAnswersDataItem, formAnswersState } from '../../shared';
+import { FormAnswersDataItem, formAnswersState, LazyLoad } from '../../shared';
 import { PreviewContext } from './preview.context';
 import { Checkboxes, Header, Paragraph, Tags } from './renderers';
 
@@ -44,7 +44,9 @@ export function RenderAnswers() {
 
     return (
       <PreviewContext.Provider key={data.id} value={{ data }}>
-        <Component />
+        <LazyLoad>
+          <Component />
+        </LazyLoad>
       </PreviewContext.Provider>
     );
   }

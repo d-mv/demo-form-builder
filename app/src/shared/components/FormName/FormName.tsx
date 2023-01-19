@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 import { ChangeEvent } from 'react';
 
 import classes from './FormName.module.scss';
+
 interface FormNameProps {
   onChange: (arg: string) => void;
   error: string;

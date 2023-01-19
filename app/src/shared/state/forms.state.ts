@@ -2,7 +2,7 @@ import { atom, selector, DefaultValue } from 'recoil';
 
 import { FormItem } from '../types';
 
-export const forms = atom<{ isLoading: boolean; items: FormItem[] }>({
+export const formsState = atom<{ isLoading: boolean; items: FormItem[] }>({
   key: 'forms/items',
   default: {
     isLoading: false,
@@ -12,10 +12,10 @@ export const forms = atom<{ isLoading: boolean; items: FormItem[] }>({
 
 export const formsSelector = selector({
   key: 'forms/items/selector',
-  get: ({ get }) => get(forms),
+  get: ({ get }) => get(formsState),
   set: ({ set, get }, v) => {
     if (v instanceof DefaultValue) {
-      set(forms, v);
+      set(formsState, v);
       return;
     }
 
@@ -23,9 +23,9 @@ export const formsSelector = selector({
     const ids = v.items.map(f => f._id);
 
     // remove existing duplicates
-    const current = get(forms).items.filter(f => !ids.includes(f._id));
+    const current = get(formsState).items.filter(f => !ids.includes(f._id));
 
     current.push(...v.items);
-    set(forms, { ...v, items: current });
+    set(formsState, { ...v, items: current });
   },
 });

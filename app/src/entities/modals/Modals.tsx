@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { Dialog, LazyLoad, Modal, modalIdState, MODALS_ENUM } from '../../shared';
-import { Constructor } from '../administrator';
 import { PreviewContainer } from '../preview';
+import { Constructor } from './Constructor';
 import { Forms } from './Forms';
+import { Loader } from './Loader';
 import { ModalsContext } from './modals.context';
 import { UseForm } from './UseForm';
 
@@ -44,15 +45,9 @@ export function Modals() {
 
   if (modalId === MODALS_ENUM.NONE) return null;
 
-  // message to render alongside library component
-  function renderLoading() {
-    // TODO: move to new component
-    return (
-      <div>
-        <p style={{ position: 'absolute', top: '50%', left: '50%' }}>Loading...</p>
-      </div>
-    );
-  }
+  // message to render alongside library component, cause library is slow
+  // on first time load
+  const renderLoading = () => <Loader />;
 
   function renderModalContents() {
     const Component = modal.component;
@@ -62,7 +57,6 @@ export function Modals() {
         <ModalsContext.Provider value={{ onLoad: () => setIsLoading(false) }}>
           <LazyLoad>
             <Component />
-            {/* <PreviewContainer /> */}
           </LazyLoad>
           {ifTrue(isLoading, renderLoading)}
         </ModalsContext.Provider>

@@ -7,6 +7,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import classes from './Constructor.module.scss';
 import {
   Body,
+  CONFIG,
   Container,
   Footer,
   formBuilderState,
@@ -19,7 +20,7 @@ import {
   selectedFormState,
   useWsService,
 } from '../../../shared';
-import { ModalsContext } from '../../modals';
+import { ModalsContext } from '..';
 
 const clone = rfdc({ proto: false, circles: false });
 
@@ -66,10 +67,8 @@ export default function Constructor() {
     else if ((!taskData.length || !form.name) && submitEnabled) setSubmitEnabled(false);
   }, [taskData, form.name, formError, submitEnabled]);
 
-  // temporary hack to avoid double html5 backend
-  // TODO: research older react version
-  // @ts-ignore -- temp
-  if (window.__isReactDndBackendSetUp) {
+  // when using Strict mode, React renders everything twice, generating problems for the library
+  if (CONFIG.isDev && R.path(['__isReactDndBackendSetUp'], window)) {
     // @ts-ignore -- temp
     window.__isReactDndBackendSetUp = false;
   }
@@ -89,8 +88,6 @@ export default function Constructor() {
 
     if (id === ModalFooterButtons.SAVE) {
       closeModal();
-      // eslint-disable-next-line no-console
-      console.log(selectedFormId);
 
       // TODO: move below into WsService hook?
       // drop the _id for compatibility with the backend

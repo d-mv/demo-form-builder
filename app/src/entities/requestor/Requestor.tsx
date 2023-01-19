@@ -47,7 +47,7 @@ export function Requestor() {
 
   return (
     <ButtonContainer>
-      <Button isOpen={modalId === id} onClick={handleFormsClick} label='Request' isDisabled={!forms.items.length} />
+      <Button isOpen={modalId === id} onClick={handleFormsClick} label='Requestor' isDisabled={!forms.items.length} />
       {ifTrue(answers, renderAnswerButton)}
     </ButtonContainer>
   );
