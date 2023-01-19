@@ -16,6 +16,7 @@ export function FormName({ onChange, error, value }: FormNameProps) {
   return (
     <div className={classes.container}>
       <input
+        autoFocus
         className={clsx(classes.input, { [classes.error]: Boolean(error) })}
         placeholder='Enter form name'
         onChange={handleChange}

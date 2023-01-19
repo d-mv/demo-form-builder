@@ -1,6 +1,6 @@
 import { as } from '@mv-d/toolbelt';
 import { createContext } from 'react';
-import { FormGeneratorOnSubmitParams } from 'react-form-builder2';
+
 import { FormAnswersDataItem } from '../../shared';
 
 interface PreviewContextType {

@@ -39,6 +39,30 @@ export async function addAnswersController(answers: AnswerItem) {
   }
 }
 
+export async function updateFormController(form: FormItem & { _id: string }) {
+  const logger = errorLogger('updateFormController');
+
+  // TODO: provide standard way of sending errors
+  if (!form) {
+    logger('Incorrect argument');
+    return;
+  }
+
+  try {
+    const result = await FormModel.updateOne(
+      { _id: form._id },
+      { name: form.name, data: serializeJavascript(form.data) },
+    );
+
+    // TODO: provide client subscription to these events
+    if (result.modifiedCount) WsService.send('info', `Form ${form.name} has been updated`);
+    else WsService.send('error', `Form ${form.name} was not updated`);
+  } catch (err) {
+    logger(as<MongooseError>(err).message);
+    WsService.send('error', err);
+  }
+}
+
 export async function addFormController(form: FormItem) {
   const logger = errorLogger('addFormController');
 

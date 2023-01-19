@@ -1,5 +1,5 @@
 import { PropsWithoutRef } from 'react';
-import { MdDeleteOutline } from 'react-icons/md';
+import { MdDeleteOutline, MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank } from 'react-icons/md';
 import { FaUser } from 'react-icons/fa';
 import { TiInfoLarge, TiThMenu } from 'react-icons/ti';
 import { IoClose, IoWarning, IoReturnUpBack } from 'react-icons/io5';
@@ -33,6 +33,8 @@ export const Icons = makeMatch(
     form: TbForms,
     alert: HiOutlineBellAlert,
     error: TbFaceIdError,
+    checkBox: MdOutlineCheckBox,
+    checkBoxBlank: MdOutlineCheckBoxOutlineBlank,
   },
   () => <div />,
 );

@@ -1,1 +1,1 @@
-export * from './RenderTags';
+export * from './Tags';

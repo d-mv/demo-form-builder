@@ -5,5 +5,9 @@ interface TagProp {
 }
 
 export function Tag({ value }: TagProp) {
-  return <div className={classes.container}>{value}</div>;
+  return (
+    <div className={classes.container}>
+      <p className='p4'>{value}</p>
+    </div>
+  );
 }

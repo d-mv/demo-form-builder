@@ -67,6 +67,8 @@ export default function Forms() {
   }
 
   function renderFormButton(form: FormItem) {
+    // eslint-disable-next-line no-console
+    console.log(form);
     return <FormButton key={form._id} id={form._id} label={form.name} onClick={handleClick(form._id)} />;
   }
 

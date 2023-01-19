@@ -2,7 +2,13 @@ import { Optional } from '@mv-d/toolbelt';
 import { Server } from 'socket.io';
 
 import { CONFIG } from '../config';
-import { addAnswersController, addFormController, getFormsController, sendFormController } from '../controllers';
+import {
+  addAnswersController,
+  addFormController,
+  getFormsController,
+  sendFormController,
+  updateFormController,
+} from '../controllers';
 import { logger } from '../server';
 
 class WsServiceClass {
@@ -18,6 +24,7 @@ class WsServiceClass {
 
       socket.on('sendForm', sendFormController);
       socket.on('addForm', addFormController);
+      socket.on('updateForm', updateFormController);
       socket.on('getForms', getFormsController);
       socket.on('addAnswers', addAnswersController);
 

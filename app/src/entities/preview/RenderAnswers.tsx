@@ -1,16 +1,37 @@
 import { makeMatch } from '@mv-d/toolbelt';
-import { FormGeneratorOnSubmitParams } from 'react-form-builder2';
 import { useRecoilValue } from 'recoil';
 
 import { FormAnswersDataItem, formAnswersState } from '../../shared';
 import { PreviewContext } from './preview.context';
-import { RenderTags } from './renderers';
+import { Checkboxes, Header, Paragraph, Tags } from './renderers';
 
 const FORM_RENDERERS = makeMatch(
   {
-    tags: RenderTags,
+    Tags: Tags,
+    Header: Header,
+    Paragraph: Paragraph,
+    Checkboxes: Checkboxes,
+    //  'Label',
+    //  'LineBreak',
+    //  'Dropdown',
+    //  'RadioButtons',
+    //  'TextInput',
+    //  'EmailInput',
+    //  'NumberInput',
+    //  'PhoneNumber',
+    //  'TextArea',
+    //  'TwoColumnRow',
+    //  'Image',
+    //  'Rating',
+    //  'DatePicker',
+    //  'Signature',
+    //  'HyperLink',
+    //  'Download',
+    //  'Range',
+    //  'Camera',[]
+    //  'FileUpload',
   },
-  null,
+  () => null,
 );
 
 export function RenderAnswers() {
@@ -18,17 +39,11 @@ export function RenderAnswers() {
 
   if (!answers) return null;
 
-  // eslint-disable-next-line no-console
-  console.log(answers.data);
-
   function renderAnswer(data: FormAnswersDataItem) {
-    // TODO: switch to using element name
-    const name = data.name.split('_')[0];
-
-    const Component = FORM_RENDERERS[name];
+    const Component = FORM_RENDERERS[data.element];
 
     return (
-      <PreviewContext.Provider value={{ data }}>
+      <PreviewContext.Provider key={data.id} value={{ data }}>
         <Component />
       </PreviewContext.Provider>
     );

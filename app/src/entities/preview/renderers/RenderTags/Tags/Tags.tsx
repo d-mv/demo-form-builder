@@ -1,11 +1,14 @@
+import { clsx } from 'clsx';
 import { useContext } from 'react';
 
 import { PreviewContext } from '../../../preview.context';
 import { Tag } from '../Tag';
-import classes from './RenderTags.module.scss';
+import classes from './Tags.module.scss';
 
-export default function RenderTags() {
+export default function Tags() {
   const { data } = useContext(PreviewContext);
+
+  if (data.element !== 'Tags') return null;
 
   function renderTag({ key, text }: { key: string; text: string }) {
     return (
@@ -16,8 +19,8 @@ export default function RenderTags() {
   }
 
   return (
-    <div className={classes.container}>
-      <h6>{data.label}</h6>
+    <div className={clsx(classes.container, 'list_item')}>
+      <h5>{data.label}</h5>
       {/* @ts-ignore -- incorrect type in the library */}
       <ul className={classes.items}>{data.value.map(renderTag)}</ul>
     </div>

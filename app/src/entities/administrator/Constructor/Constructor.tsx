@@ -1,5 +1,6 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { AnyValue } from '@mv-d/toolbelt';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import rfdc from 'rfdc';
+import { AnyValue, R } from '@mv-d/toolbelt';
 import { FormBuilderPostData, ReactFormBuilder, TaskData } from 'react-form-builder2';
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -11,7 +12,6 @@ import {
   formBuilderState,
   formErrorState,
   FormName,
-  formReviewSelector,
   Header,
   ModalFooterButtons,
   modalIdState,
@@ -21,6 +21,8 @@ import {
 } from '../../../shared';
 import { ModalsContext } from '../../modals';
 
+const clone = rfdc({ proto: false, circles: false });
+
 export default function Constructor() {
   const ref = useRef<AnyValue>(null);
 
@@ -28,6 +30,7 @@ export default function Constructor() {
 
   const closeModal = useResetRecoilState(modalIdState);
 
+  // in edit mode
   const selectedFormId = useRecoilValue(selectedFormState);
 
   const [form, setForm] = useRecoilState(formBuilderState);
@@ -86,8 +89,13 @@ export default function Constructor() {
 
     if (id === ModalFooterButtons.SAVE) {
       closeModal();
+      // eslint-disable-next-line no-console
+      console.log(selectedFormId);
+
       // TODO: move below into WsService hook?
-      send('addForm', { ...form, data: taskData });
+      // drop the _id for compatibility with the backend
+      if (selectedFormId) send('updateForm', { ...form, data: taskData });
+      else send('addForm', R.omit(['_id'], { ...form, data: taskData }));
     }
   }
 
@@ -101,7 +109,7 @@ export default function Constructor() {
           saveAlways={true}
           onPost={handleChange}
           // @ts-ignore -- data is missing in types, but available
-          data={selectedFormId ? form.data : []}
+          data={selectedFormId ? form.data.map(clone) : []}
         />
       </Body>
       <Footer

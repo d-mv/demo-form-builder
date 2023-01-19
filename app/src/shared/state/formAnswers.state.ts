@@ -7,23 +7,45 @@ const a: FormAnswers = {
   formName: 'some_forms',
   data: [
     {
-      custom_name: 'tags_106F0C41-66F7-48C3-9BB0-8955A0521A51',
-      name: 'tags_106F0C41-66F7-48C3-9BB0-8955A0521A51',
-      label: 'These are tags',
+      id: '111',
+      bold: false,
+      element: 'Header',
+      italic: false,
+      text: 'Header Text',
+    },
+    {
+      id: '111',
+      bold: false,
+      element: 'Paragraph',
+      italic: false,
+      text: 'Paragraph',
+    },
+    {
+      id: '111',
+      element: 'Checkboxes',
+      field_name: 'tags_B1BFB49D-E12A-44E8-9F64-8BA23EE03DC3',
+      label: 'Placeholder label',
+      text: 'Tags',
+      value: ['checkboxes_option_9971931E-CECE-47FE-AF8B-7C2A64A5A937'],
+    },
+    {
+      id: '111',
+      element: 'Tags',
+      field_name: 'tags_B1BFB49D-E12A-44E8-9F64-8BA23EE03DC3',
+      label: 'Placeholder label',
+      text: 'Tags',
       value: [
-        // @ts-ignore -- temp
         {
-          key: 'tags_option_26F88CFE-40D3-4458-8613-BC4745B545CE',
+          key: 'tags_option_DB8A18ED-F678-456C-A51C-8D4B8C469589',
           label: 'Place holder option 3',
           text: 'Place holder option 3',
           value: 'place_holder_tag_3',
         },
-        // @ts-ignore -- temp
         {
-          key: 'tags_option_26F88CFE40D3-4458-8613-BC4745B545CE',
-          label: 'Place holder option 3',
-          text: 'Place holder option 3',
-          value: 'place_holder_tag_3',
+          key: 'tags_option_DB8A18ED-F678-456C-A51C-8D4B8469589',
+          label: 'Place holder option 2',
+          text: 'Place holder option 2',
+          value: 'place_holder_tag_2',
         },
       ],
     },
@@ -32,8 +54,8 @@ const a: FormAnswers = {
 
 export const formAnswersState = atom<Optional<FormAnswers>>({
   key: 'form/answers',
-  // default: undefined,
-  default: a,
+  default: undefined,
+  // default: a,
 });
 
 // TODO: do we need it or we can use reset/set/value hooks

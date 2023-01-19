@@ -11,7 +11,7 @@ interface HeaderProps {
 export function Header({ onClick, title }: HeaderProps) {
   return (
     <header className={classes.container}>
-      <h5>{title}</h5>
+      <h2>{title}</h2>
       <button className={classes['close-button']} onClick={onClick}>
         <Icon icon='close' />
       </button>
