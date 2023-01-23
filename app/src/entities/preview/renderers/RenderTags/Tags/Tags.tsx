@@ -21,7 +21,6 @@ export default function Tags() {
   return (
     <div className={clsx(classes.container, 'list_item')}>
       <h5>{data.label}</h5>
-      {/* @ts-ignore -- incorrect type in the library */}
       <ul className={classes.items}>{data.value.map(renderTag)}</ul>
     </div>
   );
